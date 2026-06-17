@@ -1,0 +1,21 @@
+# ── Confidential raw source readings — NEVER commit ──
+# The weekly IFR / LSEG LPC tracker PDFs are licensed third-party material.
+*.pdf
+
+# ── Generated / build artifacts ──
+# The .docx is generated from the .md via pandoc; regenerate rather than rely on git history.
+# (Left tracked by default — delete the next line if you'd rather not version the binary.)
+# *.docx
+
+# ── Temp / lock / OS files ──
+~$*
+.~lock.*
+*.tmp
+.DS_Store
+Thumbs.db
+
+# ── Local archive snapshots (historical weekly copies) ──
+archive/
+
+# ── Node (only if you ever add tooling) ──
+node_modules/
