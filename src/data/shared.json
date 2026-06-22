@@ -1,0 +1,221 @@
+{
+ "wider": [
+  {
+   "t": "IFR “Taiwan Loan House”",
+   "d": "recognised as the most active arranger in Taiwan's domestic syndicated market."
+  },
+  {
+   "t": "Supermicro's first Taiwan loan",
+   "d": "CTBC led the ~US$1.765bn debut (Feb 2026) — an AI-server name choosing CTBC."
+  },
+  {
+   "t": "Taoyuan data-centre campus",
+   "d": "MLAB with Bank SinoPac — but Taipower's freeze on new 5MW+ power approvals north of Taoyuan caps appetite."
+  }
+ ],
+ "gloss": [
+  [
+   "The bank roles",
+   [
+    [
+     "MLAB",
+     "Mandated Lead Arranger & Bookrunner — top role: structures the deal and runs the book. The fee-rich seat CTBC competes for."
+    ],
+    [
+     "MLA / Arranger",
+     "Lower participation tiers; your title and fee scale with how much you commit."
+    ],
+    [
+     "Coordinator / Agent",
+     "Runs the syndication / administers the loan after signing."
+    ],
+    [
+     "Underwriter",
+     "Guarantees the amount even if other banks don't show up — more risk, more fee."
+    ]
+   ]
+  ],
+  [
+   "Loan structure",
+   [
+    [
+     "Tranche",
+     "A slice of a loan with its own terms or currency."
+    ],
+    [
+     "Term loan vs RCF",
+     "Term loan = borrowed once, repaid on schedule. Revolver (RCF) = draw-repay-redraw, like a corporate credit card."
+    ],
+    [
+     "Bullet vs amortising",
+     "Repaid all at the end vs paid down over the life."
+    ],
+    [
+     "Tenor / average life",
+     "Length of the loan / average time the money is actually outstanding."
+    ],
+    [
+     "Greenshoe / accordion",
+     "Options to upsize the loan if demand is strong."
+    ],
+    [
+     "A&E",
+     "Amend & Extend — push out maturities on an existing facility."
+    ]
+   ]
+  ],
+  [
+   "Pricing",
+   [
+    [
+     "Margin / spread",
+     "Interest above a benchmark, in basis points (100bp = 1.00%). “155bp over SOFR” = SOFR + 1.55%."
+    ],
+    [
+     "All-in pricing",
+     "Margin + annualised fees = a lender's total yield."
+    ],
+    [
+     "Upfront / participation fee",
+     "One-time fee for joining, scaled by ticket size."
+    ],
+    [
+     "Interest-rate floor",
+     "A minimum rate even if the benchmark falls (e.g. 2.5%)."
+    ],
+    [
+     "Benchmarks",
+     "SOFR (USD), Taibor (TWD), Hibor (HKD), BBSY (AUD), Tonar (JPY), LPR (China)."
+    ],
+    [
+     "Cov-lite",
+     "Covenant-lite — a loan with few maintenance covenants; common in LBOs, more lender risk."
+    ]
+   ]
+  ],
+  [
+   "Deal types",
+   [
+    [
+     "Syndicated loan",
+     "One large loan funded by a group of banks."
+    ],
+    [
+     "Club loan",
+     "Small deal among a few relationship banks, no broad syndication."
+    ],
+    [
+     "LBO / TLB",
+     "Leveraged buyout / Term Loan B — debt backing a PE acquisition; higher leverage and pricing."
+    ],
+    [
+     "SLL / social loan",
+     "Pricing tied to ESG / social targets; “social loan” funds a social purpose (e.g. education)."
+    ],
+    [
+     "Oversubscribed / upsized",
+     "More demand than sought, so the deal is increased."
+    ]
+   ]
+  ],
+  [
+   "Chip terms (Jun 15 theme)",
+   [
+    [
+     "OSAT",
+     "Outsourced Semiconductor Assembly & Test — ASE's business; packaging + testing chips."
+    ],
+    [
+     "CoWoS",
+     "Advanced packaging that integrates a GPU with its HBM stacks — the AI bottleneck."
+    ],
+    [
+     "HBM",
+     "High-Bandwidth Memory — the AI-GPU memory crowding out conventional DRAM and spiking prices."
+    ]
+   ]
+  ]
+ ],
+ "secondary": [
+  {
+   "name": "PT Sri Rejeki Isman (Sritex)",
+   "region": "Indonesia · textile",
+   "bid": 0.3,
+   "chg": 0
+  },
+  {
+   "name": "MMI International",
+   "region": "Malaysia · tech",
+   "bid": 21.5,
+   "chg": 0
+  },
+  {
+   "name": "Saijan",
+   "region": "India",
+   "bid": 37.5,
+   "chg": 0
+  },
+  {
+   "name": "Evolution Wellness (Fitness First)",
+   "region": "Singapore · gyms",
+   "bid": 40.5,
+   "chg": 0
+  },
+  {
+   "name": "ANZ Hospitals",
+   "region": "Australia · hospitals",
+   "bid": 63.0,
+   "chg": 0
+  },
+  {
+   "name": "Bingo Industries",
+   "region": "Australia · waste",
+   "bid": 66.5,
+   "chg": 3.0
+  },
+  {
+   "name": "VXI Global Solutions",
+   "region": "India · BPO",
+   "bid": 70.0,
+   "chg": 0
+  },
+  {
+   "name": "Virtus Health",
+   "region": "Australia · fertility",
+   "bid": 86.5,
+   "chg": 0
+  },
+  {
+   "name": "Health & Happiness (H&H)",
+   "region": "HK · formula (also in Jun 15)",
+   "bid": 95.5,
+   "chg": 0,
+   "link": {
+    "wk": "jun15",
+    "borrower": "H&H International"
+   }
+  },
+  {
+   "name": "Far East Horizon",
+   "region": "HK · leasing (also in Jun 8)",
+   "bid": 99.375,
+   "chg": 0.25,
+   "link": {
+    "wk": "jun8",
+    "borrower": "Int'l Far Eastern Leasing"
+   }
+  },
+  {
+   "name": "Snacking Investments",
+   "region": "Australia · LBO",
+   "bid": 100.0,
+   "chg": -0.2
+  },
+  {
+   "name": "Superannuation & Inv Finco",
+   "region": "Australia",
+   "bid": 100.28,
+   "chg": 0.07
+  }
+ ]
+}

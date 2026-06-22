@@ -17,7 +17,7 @@ A scheduled task — **"weekly-loan-tracker"** — fires **every Monday (~9:00 A
 2. If it finds one, it:
    - archives the current briefing + dashboard into `archive/<date>/`,
    - reads the new PDF, builds that week's **deal list**, and refreshes market figures with a few web checks,
-   - **adds the new reading as a new selectable week on the dashboard** (prior weeks stay — you switch between them with the date toggle at the top right), and sets the newest week as the default view,
+   - **writes a new `src/data/<week>.json`** for the reading and **rebuilds `dist/`** (`npm run build`) — the new reading becomes a selectable week (prior weeks stay; switch with the date toggle), newest shown by default,
    - refreshes **`CTBC_Loan_Market_Briefing.docx`** for the new week,
    - fills the **"What's new"** panel by diffing against the previous week (debuts, upsizes, new mandates, new lead themes, pricing moves),
    - posts a short summary and shows you the updated files.
@@ -41,7 +41,8 @@ A scheduled task — **"weekly-loan-tracker"** — fires **every Monday (~9:00 A
 
 | File | What it is |
 |---|---|
-| `CTBC_Loan_Market_Dashboard.html` | Living dashboard — open in a browser; use the **date toggle** (top right) to switch between weeks (e.g. Jun 1 ↔ Jun 15) |
+| `dist/CTBC_Loan_Market_Dashboard.html` | Living dashboard (built) — open in a browser; **date toggle** (top right) switches weeks |
+| `src/data/*.json` | The editable per-week data the build bundles into the dashboard |
 | `CTBC_Loan_Market_Briefing.docx` | Full written briefing (Word) |
 | `CTBC_Loan_Market_Briefing.md` | Same briefing in Markdown (source) |
 | `CTBC_Loan_Market_Deck.pptx` | Slide deck for the supervisor discussion |

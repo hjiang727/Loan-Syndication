@@ -1,0 +1,15 @@
+{
+  "name": "ctbc-loan-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "CTBC APAC syndicated-loan weekly dashboard — editable src/ → bundled dist/ (single self-contained HTML).",
+  "scripts": {
+    "build": "node tools/build.mjs",
+    "test": "node tools/test.mjs",
+    "verify": "node tools/build.mjs && node tools/test.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^24.1.0"
+  }
+}

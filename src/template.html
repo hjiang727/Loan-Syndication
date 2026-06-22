@@ -1,0 +1,891 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTBC · APAC Syndicated Loan Tracker — weekly desk dashboard</title>
+<style>
+  :root{
+    --bg:#f4f6f9; --surface:#ffffff; --surface2:#eef2f7; --ink:#0f2236; --muted:#5b6b7d;
+    --line:#dde4ec; --navy:#0b3b63; --navy2:#10518a; --teal:#0d9488; --teal-soft:#d5efec;
+    --amber:#b7791f; --amber-soft:#fbeccd; --red:#b4232a; --red-soft:#f8dcdc; --green:#1f7a4d; --green-soft:#d6efe0;
+    --ctbc:#0d9488; --shadow:0 1px 3px rgba(16,40,64,.08),0 1px 2px rgba(16,40,64,.05);
+    --axis:#9aa7b4; --grid:#e6ecf2;
+    --ch-navy:#0b3b63; --ch-blue:#2f7fd1; --ch-teal:#0d9488; --ch-green:#1f7a4d; --ch-amber:#b7791f;
+    --ch-red:#b4232a; --ch-rose:#c2557a; --ch-purple:#7c5cbf; --ch-slate:#64748b; --ch-brown:#9a7b43; --ch-cyan:#0e8aa8;
+  }
+  html[data-theme="dark"]{
+    --bg:#0c1620; --surface:#13212e; --surface2:#1a2c3c; --ink:#e8eef5; --muted:#9fb0c0;
+    --line:#243646; --navy:#5aa9e6; --navy2:#7cc0f5; --teal:#2dd4bf; --teal-soft:#103b37;
+    --amber:#e0b257; --amber-soft:#3a2e12; --red:#f08a8a; --red-soft:#3a1b1b; --green:#5cc98c; --green-soft:#12321f;
+    --ctbc:#2dd4bf; --shadow:0 1px 3px rgba(0,0,0,.4);
+    --axis:#5b6b7d; --grid:#1f3242;
+    --ch-navy:#5aa9e6; --ch-blue:#79b8ff; --ch-teal:#2dd4bf; --ch-green:#5cc98c; --ch-amber:#e0b257;
+    --ch-red:#f08a8a; --ch-rose:#f0a3c0; --ch-purple:#b59cf0; --ch-slate:#9fb0c0; --ch-brown:#caa97a; --ch-cyan:#5ed0e6;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1180px;margin:0 auto;padding:22px 20px 60px}
+  header.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;border-bottom:2px solid var(--navy);padding-bottom:14px;margin-bottom:18px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .logo{width:42px;height:42px;border-radius:9px;background:var(--ctbc);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;letter-spacing:.5px;flex:none}
+  h1{font-size:20px;margin:0 0 2px;font-weight:700;letter-spacing:-.2px}
+  .sub{color:var(--muted);font-size:12.5px}
+  .toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  .seglabel{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+  .dateseg{display:inline-flex;background:var(--surface2);border:1px solid var(--line);border-radius:9px;padding:3px;gap:2px}
+  .dateseg button{border:none;background:transparent;color:var(--muted);font-size:12.5px;font-weight:600;padding:6px 13px;border-radius:7px;cursor:pointer}
+  .dateseg button:hover{color:var(--ink)}
+  .dateseg button.active{background:var(--ctbc);color:#fff}
+  .btn{background:var(--surface);border:1px solid var(--line);color:var(--ink);padding:7px 12px;border-radius:8px;font-size:13px;cursor:pointer;box-shadow:var(--shadow)}
+  .btn:hover{border-color:var(--navy)}
+  .lead{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--ctbc);border-radius:10px;padding:14px 16px;margin-bottom:20px;box-shadow:var(--shadow);font-size:14.5px}
+  .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
+  .kpi{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 14px;box-shadow:var(--shadow)}
+  .kpi .v{font-size:20px;font-weight:700;letter-spacing:-.4px;line-height:1.1}
+  .kpi .l{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.35}
+  .kpi .t{font-size:11px;font-weight:600;margin-top:6px}
+  .up{color:var(--green)} .down{color:var(--red)} .warn{color:var(--amber)}
+  h2.sec{font-size:15px;font-weight:700;margin:30px 0 12px;display:flex;align-items:center;gap:9px}
+  h2.sec .bar{width:4px;height:16px;background:var(--ctbc);border-radius:2px;display:inline-block}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;box-shadow:var(--shadow)}
+  .card h3{margin:0 0 4px;font-size:14px}
+  .card .cap{font-size:12px;color:var(--muted);margin-bottom:14px}
+  .barrow{display:flex;align-items:center;gap:10px;margin:11px 0}
+  .barrow .lab{width:108px;font-size:12px;color:var(--muted);flex:none;text-align:right}
+  .track{flex:1;background:var(--surface2);border-radius:6px;height:26px;position:relative;overflow:hidden}
+  .fill{height:100%;border-radius:6px;display:flex;align-items:center;padding:0 9px;color:#fff;font-size:12px;font-weight:600;white-space:nowrap}
+  .filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+  .filters input,.filters select{background:var(--surface);border:1px solid var(--line);color:var(--ink);padding:8px 10px;border-radius:8px;font-size:13px}
+  .filters input{min-width:200px}
+  .chk{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted);cursor:pointer;user-select:none}
+  .count{font-size:12px;color:var(--muted);margin-left:auto}
+  .tablewrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;box-shadow:var(--shadow)}
+  table{width:100%;border-collapse:collapse;font-size:12.7px}
+  thead th{background:var(--surface2);text-align:left;padding:10px 11px;font-weight:600;color:var(--ink);cursor:pointer;white-space:nowrap;border-bottom:1px solid var(--line)}
+  thead th:hover{color:var(--navy)}
+  thead th .ar{color:var(--muted);font-size:10px}
+  tbody td{padding:9px 11px;border-bottom:1px solid var(--line);vertical-align:top}
+  tbody tr:hover{background:var(--surface2)}
+  tbody tr:last-child td{border-bottom:none}
+  .pill{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+  .b{font-weight:600}
+  .ctbc-badge{background:var(--teal-soft);color:var(--ctbc);border:1px solid var(--ctbc)}
+  .sec-tag{background:var(--surface2);color:var(--muted)}
+  .ladder{display:flex;flex-direction:column;gap:9px}
+  .lad{display:flex;align-items:center;gap:10px}
+  .lad .seg{height:30px;border-radius:7px;display:flex;align-items:center;padding:0 10px;color:#fff;font-size:12px;font-weight:600;flex:none}
+  .lad .who{font-size:12.5px;color:var(--muted)}
+  .risk{display:grid;grid-template-columns:1fr 1fr 1fr;gap:13px}
+  .rk{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:13px 14px;box-shadow:var(--shadow);border-top:3px solid var(--red)}
+  .rk.med{border-top-color:var(--amber)} .rk.lo{border-top-color:var(--navy)}
+  .rk h4{margin:0 0 5px;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .rk .sev{font-size:9.5px;font-weight:700;padding:2px 6px;border-radius:5px;background:var(--red-soft);color:var(--red)}
+  .rk.med .sev{background:var(--amber-soft);color:var(--amber)} .rk.lo .sev{background:var(--surface2);color:var(--muted)}
+  .rk p{margin:0;font-size:12px;color:var(--muted)}
+  details.gl{background:var(--surface);border:1px solid var(--line);border-radius:11px;padding:0;margin-bottom:8px;box-shadow:var(--shadow);overflow:hidden}
+  details.gl summary{padding:12px 15px;cursor:pointer;font-weight:600;font-size:13.5px;list-style:none}
+  details.gl summary::-webkit-details-marker{display:none}
+  details.gl summary::before{content:"+ ";color:var(--ctbc);font-weight:700}
+  details.gl[open] summary::before{content:"– "}
+  details.gl .gc{padding:0 15px 14px;font-size:13px;color:var(--muted)}
+  details.gl .gc dt{font-weight:600;color:var(--ink);margin-top:9px}
+  details.gl .gc dd{margin:1px 0 0;}
+  footer{margin-top:34px;padding-top:16px;border-top:1px solid var(--line);font-size:11.5px;color:var(--muted)}
+  footer a{color:var(--navy)}
+  .note{font-size:11.5px;color:var(--muted);margin-top:8px;font-style:italic}
+  @media(max-width:860px){.kpis{grid-template-columns:repeat(2,1fr)}.grid2,.risk{grid-template-columns:1fr}}
+  /* ---- Trends view ---- */
+  .chart svg{width:100%;height:auto;display:block;overflow:visible}
+  text.axlab{fill:var(--muted);font-size:11px}
+  text.axval{fill:var(--ink);font-size:11px;font-weight:600}
+  text.axttl{fill:var(--muted);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+  line.grid{stroke:var(--grid);stroke-width:1}
+  line.axis{stroke:var(--axis);stroke-width:1}
+  .bar-seg{transition:opacity .12s} .bar-seg:hover{opacity:.82}
+  .chart-legend{display:flex;flex-wrap:wrap;gap:7px 15px;margin-top:13px}
+  .chart-legend .lg{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);cursor:pointer;user-select:none}
+  .chart-legend .lg .sw{width:11px;height:11px;border-radius:3px;flex:none}
+  .chart-legend .lg.off{opacity:.4}
+  .scatterwrap{position:relative}
+  .sc-tip{position:absolute;pointer-events:none;background:var(--surface);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow);padding:8px 10px;font-size:11.5px;color:var(--ink);max-width:240px;opacity:0;transform:translate(-50%,-112%);transition:opacity .07s;z-index:6;line-height:1.4}
+  .sc-tip .b{font-weight:700} .sc-tip .m{color:var(--muted)}
+  circle.pt{cursor:pointer} circle.pt:hover{stroke:var(--ink);stroke-width:1.6}
+  .trendkpi .d{font-size:11px;font-weight:600;margin-top:6px}
+  /* ---- World deal map ---- */
+  .mapwrap{position:relative;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:linear-gradient(180deg,var(--surface2),var(--surface))}
+  .mapwrap svg{width:100%;height:auto;display:block;cursor:grab;-webkit-user-select:none;user-select:none}
+  .mapwrap svg.drag{cursor:grabbing}
+  path.land{fill:var(--surface);stroke:var(--line);stroke-width:.7;vector-effect:non-scaling-stroke}
+  html[data-theme="dark"] path.land{fill:#0f1e2b}
+  circle.dot{cursor:pointer;vector-effect:non-scaling-stroke;transition:fill-opacity .1s}
+  circle.dot:hover{fill-opacity:1}
+  circle.dot.ctbc{stroke:var(--ctbc);stroke-width:2}
+  circle.dot.sel{stroke:var(--ink);stroke-width:2.5}
+  circle.dot:focus-visible{outline:2px solid var(--navy);outline-offset:1px}
+  path.flow{fill:none;stroke:var(--ctbc);stroke-width:1.6;opacity:.85;stroke-dasharray:5 4;vector-effect:non-scaling-stroke;animation:flowdash 2.4s linear infinite}
+  path.flow.muted{stroke:var(--muted);opacity:.6}
+  @keyframes flowdash{to{stroke-dashoffset:-18}}
+  .mapctrls{position:absolute;top:10px;right:10px;display:flex;flex-direction:column;gap:5px;z-index:3}
+  .mapctrls button{width:30px;height:30px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:7px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:var(--shadow);line-height:1;padding:0}
+  .mapctrls button:hover{border-color:var(--navy);color:var(--navy)}
+  .mapctrls button.wide{width:auto;height:auto;padding:5px 9px;font-size:11px;font-weight:600}
+  .map-tip{position:absolute;pointer-events:none;background:var(--ink);color:var(--bg);border-radius:6px;padding:3px 8px;font-size:11px;font-weight:600;opacity:0;transform:translate(-50%,-160%);transition:opacity .07s;z-index:6;white-space:nowrap;box-shadow:var(--shadow)}
+  .dealcard{position:absolute;width:290px;max-width:calc(100% - 12px);background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--ctbc);border-radius:10px;box-shadow:0 8px 28px rgba(16,40,64,.22);padding:12px 14px;font-size:12.5px;z-index:5;opacity:0;pointer-events:none;transition:opacity .1s;max-height:calc(100% - 12px);overflow:auto}
+  .dealcard.show{opacity:1;pointer-events:auto}
+  .dealcard .x{position:absolute;top:6px;right:10px;cursor:pointer;color:var(--muted);font-size:16px;line-height:1}
+  .dealcard h4{margin:0 0 3px;font-size:13.5px;padding-right:16px}
+  .dealcard .meta{color:var(--muted);font-size:11px;margin-bottom:9px}
+  .dealcard dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:3px 9px}
+  .dealcard dt{color:var(--muted);white-space:nowrap} .dealcard dd{margin:0}
+  .dealcard .act{margin-top:10px;font-size:11.5px;color:var(--navy);cursor:pointer;font-weight:600}
+  .dealcard .act:hover{text-decoration:underline}
+  .dealcard .cardnav{display:flex;align-items:center;gap:8px;margin:0 0 9px;font-size:11px;color:var(--muted)}
+  .dealcard .cardnav button{border:1px solid var(--line);background:var(--surface);color:var(--navy);border-radius:6px;width:24px;height:20px;cursor:pointer;font-weight:700;line-height:1;padding:0}
+  .dealcard .cardnav button:hover{border-color:var(--navy)}
+  .globe-spin{animation:gspin 16s linear infinite;transform-origin:20px 20px}
+  @keyframes gspin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  @media(prefers-reduced-motion:reduce){.globe-spin,path.flow{animation:none}}
+  /* ===== UX polish ===== */
+  html[data-present="on"]{--muted:#3a4754;--line:#c2ccd6}
+  html[data-present="on"][data-theme="dark"]{--muted:#cfdbe7;--line:#34495d}
+  html[data-present="on"] .wrap{max-width:1340px}
+  html[data-present="on"] h1{font-size:24px}
+  html[data-present="on"] .lead{font-size:16.5px;line-height:1.6}
+  html[data-present="on"] .kpi .v{font-size:25px}
+  html[data-present="on"] .kpi .l{font-size:13px}
+  html[data-present="on"] h2.sec{font-size:18px}
+  html[data-present="on"] table{font-size:14px}
+  html[data-present="on"] tbody td{padding:11px 12px}
+  html[data-present="on"] .card .cap{font-size:13px}
+  html[data-present="on"] .card h3{font-size:15.5px}
+  .btn.on{background:var(--ctbc);color:#fff;border-color:var(--ctbc)}
+  .kspark{display:flex;align-items:center;gap:5px;margin-top:7px}
+  .kspark .spark{width:58px;height:18px;display:block}
+  .kspark span{font-size:9.5px;color:var(--muted);letter-spacing:.3px}
+  .sicon{width:13px;height:13px;vertical-align:-2px;margin-right:4px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+  tr.drow{cursor:pointer}
+  tr.drow:focus-visible{outline:2px solid var(--navy);outline-offset:-2px}
+  .exptri{display:inline-block;color:var(--muted);font-size:9px;transition:transform .15s;width:8px}
+  tr.drow.open .exptri{transform:rotate(90deg)}
+  tr.ddetail[hidden]{display:none}
+  tr.ddetail>td{background:var(--surface2);padding:0 11px;border-bottom:1px solid var(--line)}
+  .ddwrap{display:grid;grid-template-columns:1fr 1fr;gap:7px 20px;padding:11px 6px;font-size:12px}
+  .ddwrap .ddk{display:block;font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:1px}
+  thead th[aria-sort="ascending"],thead th[aria-sort="descending"]{color:var(--navy)}
+  thead th:focus-visible{outline:2px solid var(--navy);outline-offset:-2px}
+  @keyframes weekfade{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+  .weekswap{animation:weekfade .28s ease both}
+  @media(prefers-reduced-motion:reduce){.weekswap{animation:none}}
+  @media print{
+    html,html[data-theme="dark"]{--bg:#fff;--surface:#fff;--surface2:#f2f4f6;--ink:#111;--muted:#444;--line:#bbb;--navy:#0b3b63;--shadow:none}
+    body{background:#fff}
+    .wrap{max-width:none;padding:0 6px}
+    .toolbar,.filters,.tablewrap,#trendsView,.chart-legend,.mapctrls,.map-tip,.dealcard,.print-omit{display:none!important}
+    .card:has(#mapwrap),.card:has(#secondary),#glossary{display:none!important}
+    header.top{border-color:#111}
+    .card,.kpi,.rk,.lead{box-shadow:none!important;break-inside:avoid}
+    h2.sec{break-after:avoid}
+    .kspark{display:none}
+    a{color:#111;text-decoration:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="brand">
+      <div class="logo">CTBC</div>
+      <svg viewBox="0 0 40 40" width="32" height="32" aria-hidden="true" style="flex:none">
+        <circle cx="20" cy="20" r="16" fill="none" stroke="var(--ctbc)" stroke-width="1.5"/>
+        <g class="globe-spin">
+          <ellipse cx="20" cy="20" rx="6" ry="16" fill="none" stroke="var(--ctbc)" stroke-width="1"/>
+          <ellipse cx="20" cy="20" rx="12" ry="16" fill="none" stroke="var(--ctbc)" stroke-width=".8" opacity=".55"/>
+          <line x1="4" y1="20" x2="36" y2="20" stroke="var(--ctbc)" stroke-width=".8" opacity=".55"/>
+        </g>
+      </svg>
+      <div>
+        <h1>APAC Syndicated Loan Tracker</h1>
+        <div class="sub" id="weekmeta"></div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <span class="seglabel">View</span>
+      <div class="dateseg" id="viewseg">
+        <button data-v="weekly" class="active">Weekly</button>
+        <button data-v="trends">Trends</button>
+      </div>
+      <span class="seglabel" id="readingLabel">Reading</span>
+      <div class="dateseg" id="dateseg"></div>
+      <button class="btn" id="presentBtn" aria-pressed="false" title="Bigger type & contrast for screen-sharing">▣ Present</button>
+      <button class="btn" id="themeBtn">◑ Theme</button>
+    </div>
+  </header>
+
+  <div id="weeklyView">
+
+  <div class="lead" id="lead"></div>
+
+  <div class="card" style="border-left:4px solid var(--ctbc);border-radius:10px;margin-bottom:22px">
+    <div style="font-weight:600;font-size:14px;margin-bottom:10px">What's new <span id="wnLabel" style="color:var(--muted);font-weight:400;font-size:12.5px"></span></div>
+    <div id="whatsnew" style="display:grid;grid-template-columns:1fr 1fr;gap:8px 26px"></div>
+    <div class="note" id="wnNote"></div>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <h2 class="sec"><span class="bar"></span>The big picture</h2>
+  <div class="grid2" id="bigwrap"></div>
+
+  <h2 class="sec print-omit"><span class="bar"></span>Deal map <span style="font-weight:400;color:var(--muted);font-size:12.5px">&mdash; every financing this reading, plotted at the borrower's location</span></h2>
+  <div class="card">
+    <div class="cap">Each dot is a deal, placed at the borrower's HQ &mdash; or the project / asset site for project finance &mdash; sized by loan amount and coloured by sector; a <b>teal ring</b> marks CTBC involvement, and <b>teal arcs</b> trace CTBC cross-border lending out of Taiwan. <b>Click a dot</b> for the deal detail; drag to pan, use the +/&minus; buttons (or &#8984;/Ctrl-scroll) to zoom, or jump to <b>APAC</b> / <b>World</b>.</div>
+    <div class="mapwrap" id="mapwrap">
+      <div id="mapsvg"></div>
+      <div class="mapctrls">
+        <button id="mapZin" title="Zoom in">+</button>
+        <button id="mapZout" title="Zoom out">&minus;</button>
+        <button id="mapApac" class="wide" title="Fit Asia-Pacific">APAC</button>
+        <button id="mapWorld" class="wide" title="Fit world">World</button>
+      </div>
+      <div class="map-tip" id="mapTip"></div>
+      <div class="dealcard" id="dealcard"></div>
+    </div>
+    <div class="chart-legend" id="mapLegend"></div>
+    <div class="note" id="mapOff"></div>
+  </div>
+
+  <h2 class="sec print-omit"><span class="bar"></span>Deal tracker <span style="font-weight:400;color:var(--muted);font-size:12.5px">— every live financing in this reading</span></h2>
+  <div class="filters">
+    <input type="text" id="search" aria-label="Search deals" placeholder="Search borrower, lead bank, purpose…">
+    <select id="country" aria-label="Filter by country"><option value="">All countries</option></select>
+    <select id="sector" aria-label="Filter by sector"><option value="">All sectors</option></select>
+    <label class="chk"><input type="checkbox" id="ctbcOnly"> CTBC-involved only</label>
+    <button class="btn" id="csvBtn" title="Download the filtered table as CSV">↓ CSV</button>
+    <span class="count" id="count" aria-live="polite"></span>
+  </div>
+  <div class="tablewrap">
+    <table aria-label="Deal tracker — filter and sort columns; press Enter on a row for full detail">
+      <thead><tr>
+        <th data-k="borrower" tabindex="0" role="columnheader" aria-sort="none">Borrower <span class="ar"></span></th>
+        <th data-k="country" tabindex="0" role="columnheader" aria-sort="none">Country <span class="ar"></span></th>
+        <th data-k="sector" tabindex="0" role="columnheader" aria-sort="none">Sector <span class="ar"></span></th>
+        <th data-k="amtUSD" tabindex="0" role="columnheader" aria-sort="descending">Size (US$m) <span class="ar">▼</span></th>
+        <th data-k="display" tabindex="0" role="columnheader" aria-sort="none">Headline size <span class="ar"></span></th>
+        <th data-k="tenor" tabindex="0" role="columnheader" aria-sort="none">Tenor <span class="ar"></span></th>
+        <th data-k="leads" tabindex="0" role="columnheader" aria-sort="none">Lead banks (MLABs) <span class="ar"></span></th>
+        <th data-k="pricing" tabindex="0" role="columnheader" aria-sort="none">Pricing / notes <span class="ar"></span></th>
+      </tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="note print-omit">“CTBC” badge = CTBC is a lender, MLAB or owner on the deal. Filter with “CTBC-involved only” to see the franchise at a glance.</div>
+
+  <h2 class="sec"><span class="bar"></span>Where CTBC shows up</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="color:var(--ctbc)">In this reading</h3>
+      <div class="cap" id="ctbcCap"></div>
+      <div id="ctbcReport"></div>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--ctbc)">Wider franchise (context)</h3>
+      <div class="cap">From public reporting, not tied to one issue</div>
+      <div id="ctbcWider"></div>
+    </div>
+  </div>
+
+  <h2 class="sec print-omit"><span class="bar"></span>Secondary market — where loans trade <span style="font-weight:400;color:var(--muted);font-size:12.5px">(LSEG composite, May 2026 · same across weeks)</span></h2>
+  <div class="card">
+    <div class="cap">Average secondary <b>bid as a price out of 100</b> (par). Near 100 = performing; deep discounts = distress. A read on credit health the new-issue market doesn't show — green ≥95, amber 70–95, red &lt;70.</div>
+    <div class="grid2" style="margin:4px 0 16px;align-items:start">
+      <div>
+        <div style="font-weight:600;font-size:13px">Bid distribution</div>
+        <div class="cap" style="margin-bottom:2px">How many names trade in each price band &mdash; the distressed tail vs the near-par cluster.</div>
+        <div id="secDist"></div>
+      </div>
+      <div>
+        <div style="font-weight:600;font-size:13px">Biggest month-on-month movers</div>
+        <div class="cap" style="margin-bottom:2px">Change in bid vs the prior composite &mdash; the early-warning column.</div>
+        <div id="secMovers"></div>
+      </div>
+    </div>
+    <div id="secLinks" style="margin-bottom:16px"></div>
+    <div style="font-weight:600;font-size:13px;margin-bottom:4px">Every name in the composite, by price</div>
+    <div id="secondary"></div>
+    <div class="note">Of ~40 loans in the composite, most trade near par — but a distressed tail (Sritex ≈0, MMI 22, Saijan 38, Evolution Wellness 41) sits at deep discounts. Names like H&amp;H and Far East Horizon appear in both the weekly readings and here, so you can watch primary-market access and secondary price together.</div>
+  </div>
+
+  <h2 class="sec"><span class="bar"></span>How risk is priced — the spread ladder</h2>
+  <div class="card">
+    <div class="cap" id="ladderCap"></div>
+    <div class="ladder" id="ladder"></div>
+    <div class="note">100bp = 1.00%. Where margins are thin, lenders protect yield with rate floors, fees and security.</div>
+  </div>
+
+  <h2 class="sec"><span class="bar"></span>Risks to watch</h2>
+  <div class="risk" id="risks"></div>
+
+  <h2 class="sec print-omit"><span class="bar"></span>Loan jargon, decoded</h2>
+  <div id="glossary"></div>
+
+  </div><!-- /weeklyView -->
+
+  <div id="trendsView" style="display:none">
+    <div class="lead" id="trendsLead"></div>
+    <div class="kpis" id="trendKpis"></div>
+
+    <h2 class="sec"><span class="bar"></span>Weekly volume &amp; deal flow</h2>
+    <div class="grid2">
+      <div class="card">
+        <h3>New-deal volume by week</h3>
+        <div class="cap">Total announced size of every financing in each reading (US$bn). Excludes deals with no disclosed size.</div>
+        <div class="chart" id="chartVolume"></div>
+        <div class="note" id="noteVolume"></div>
+      </div>
+      <div class="card">
+        <h3 style="color:var(--ctbc)">CTBC involvement by week</h3>
+        <div class="cap">Deals where CTBC is a lender, MLAB or owner — count and share of each week's deal flow.</div>
+        <div class="chart" id="chartCtbc"></div>
+        <div class="note" id="noteCtbc"></div>
+      </div>
+    </div>
+
+    <h2 class="sec"><span class="bar"></span>Deal count by sector over time</h2>
+    <div class="card">
+      <div class="cap">How many financings in each sector, week by week. Click a legend item to mute it.</div>
+      <div class="chart" id="chartSector"></div>
+      <div class="chart-legend" id="legendSector"></div>
+    </div>
+
+    <h2 class="sec"><span class="bar"></span>Theme tracker — volume by week</h2>
+    <div class="card">
+      <div class="cap">Each deal tagged to a market theme; bars show theme <b>volume</b> (US$bn) or <b>deal count</b> per reading — watch the lead theme rotate. Click a legend item to mute it.</div>
+      <div class="dateseg" id="themeMetric" style="margin-bottom:14px">
+        <button data-m="vol" class="active">Volume</button>
+        <button data-m="cnt">Deals</button>
+      </div>
+      <div class="chart" id="chartTheme"></div>
+      <div class="chart-legend" id="legendTheme"></div>
+      <div class="note" id="noteTheme"></div>
+    </div>
+
+    <h2 class="sec"><span class="bar"></span>Pricing scatter — spread vs deal size</h2>
+    <div class="card">
+      <div class="filters">
+        <select id="scWeek"><option value="">All weeks</option></select>
+        <select id="scSector"><option value="">All sectors</option></select>
+        <span class="count" id="scCount"></span>
+      </div>
+      <div class="cap">Margin over the deal's own benchmark (bp) vs loan size (US$m, log scale), coloured by sector. Cheap-but-large names sit low-right; richly-priced LBOs sit top. Negative = priced <i>below</i> the local prime rate. Only deals with a disclosed spread <b>and</b> size appear.</div>
+      <div class="chart scatterwrap" id="chartScatter"></div>
+      <div class="chart-legend" id="legendScatter"></div>
+      <div class="note">Spreads are over different benchmarks (SOFR, Taibor, Hibor, BBSY…), so cross-currency comparison is indicative, not exact.</div>
+    </div>
+  </div><!-- /trendsView -->
+
+  <footer>
+    <b>Sources:</b> IFR / LSEG LPC APAC syndicated loans roundup (the weekly reading) · TrendForce / Tom's Hardware (memory) · company reporting &amp; IFR awards (CTBC). <span id="srcNote"></span>
+    <div class="note" id="footNote"></div>
+  </footer>
+
+</div>
+
+<script>
+/*__DATA__*/
+let current=ORDER[ORDER.length-1].key; // always open at the newest week (last entry in ORDER)
+let DEALS=WEEKS[current].deals;
+let sortK="amtUSD",sortDir=-1;
+
+const $=s=>document.querySelector(s);
+const W=()=>WEEKS[current];
+function money(n){return n==null?"—":n>=1000?("US$"+(n/1000).toFixed(n%1000?1:0)+"bn"):("US$"+n+"m");}
+
+function fillSeg(){
+ $("#dateseg").innerHTML=ORDER.map(o=>`<button data-k="${o.key}" class="${o.key===current?'active':''}">${o.label}</button>`).join("");
+ document.querySelectorAll("#dateseg button").forEach(b=>b.addEventListener("click",()=>switchWeek(b.dataset.k)));
+}
+function fillMeta(){
+ $("#weekmeta").textContent=W().label;
+ $("#lead").innerHTML=W().lead;
+ $("#wnLabel").textContent=W().wnLabel;
+ $("#wnNote").textContent=W().wnNote;
+ $("#ctbcCap").textContent=W().ctbcCap;
+ $("#ladderCap").textContent=W().ladderCap;
+ $("#srcNote").textContent="Showing: "+W().theme+".";
+ $("#footNote").textContent="Living dashboard — a new week is added every Monday from the IFR / LSEG LPC reading; use the date toggle to switch. Loan-market data ages quickly — treat specific terms as point-in-time.";
+}
+const SECTOR_ICON={
+ "AI / Semiconductors":'<rect x="4.5" y="4.5" width="7" height="7" rx="1"/><path d="M6.3 2.6v1.9M9.7 2.6v1.9M6.3 11.5v1.9M9.7 11.5v1.9M2.6 6.3h1.9M2.6 9.7h1.9M11.5 6.3h1.9M11.5 9.7h1.9"/>',
+ "Data centers":'<rect x="3" y="3.5" width="10" height="3.6" rx="0.7"/><rect x="3" y="8.9" width="10" height="3.6" rx="0.7"/><path d="M5 5.3h0.01M5 10.7h0.01"/>',
+ "Financials":'<path d="M2.6 6.2L8 3l5.4 3.2"/><path d="M3.6 6.6v6M6.2 6.6v6M9.8 6.6v6M12.4 6.6v6"/><path d="M2.6 13h10.8"/>',
+ "Green & infrastructure":'<path d="M12.5 3.5C7.3 3.5 3.5 6.8 3.5 12c5.2 0 9-3.3 9-8.5z"/><path d="M5.6 10.4C8 8 10 6.6 11.3 5.7"/>',
+ "Energy & utilities":'<path d="M9 2.4L4.3 9H7.4l-1 4.6L11.7 7H8.5z"/>',
+ "Real estate":'<rect x="4" y="2.6" width="8" height="10.8" rx="0.6"/><path d="M6 5h1.2M8.8 5h1.2M6 7.6h1.2M8.8 7.6h1.2M7 13.4v-2.3h2v2.3"/>',
+ "Industrials & other":'<circle cx="8" cy="8" r="2.6"/><path d="M8 2.4v1.6M8 12v1.6M2.4 8h1.6M12 8h1.6M4.2 4.2l1.1 1.1M10.7 10.7l1.1 1.1M11.8 4.2l-1.1 1.1M5.3 10.7l-1.1 1.1"/>',
+ "Consumer":'<path d="M4.4 5.5h7.2l-0.7 7.9H5.1z"/><path d="M6 5.5V4.6a2 2 0 0 1 4 0v0.9"/>',
+ "Education":'<path d="M8 3.3L14.2 6 8 8.7 1.8 6z"/><path d="M4.6 7.1v3.3c0 1 1.5 1.9 3.4 1.9s3.4-0.9 3.4-1.9V7.1"/>',
+ "Healthcare":'<path d="M6.4 2.8h3.2v3.6h3.6v3.2H9.6v3.6H6.4V9.6H2.8V6.4h3.6z"/>'
+};
+function secIcon(x){const p=SECTOR_ICON[x]; return p?'<svg class="sicon" viewBox="0 0 16 16" aria-hidden="true">'+p+'</svg>':'';}
+function weekSeries(kind){ return ORDER.map(o=>{ const ds=WEEKS[o.key].deals;
+  if(kind==='vol') return ds.reduce((a,d)=>a+(d.amtUSD||0),0);
+  if(kind==='deals') return ds.length;
+  if(kind==='ctbc') return ds.filter(d=>d.ctbc>0).length;
+  if(kind==='ai') return ds.filter(d=>d.theme==='ai_semis'||d.theme==='ai_dc').reduce((a,d)=>a+(d.amtUSD||0),0);
+  if(kind==='brokerage') return ds.filter(d=>d.theme==='brokerage').reduce((a,d)=>a+(d.amtUSD||0),0);
+  if(kind==='spread'){const v=ds.map(d=>d.spreadBp).filter(x=>x!=null&&x>0).sort((a,b)=>a-b); return v.length?v[Math.floor(v.length/2)]:0;}
+  return 0; }); }
+function sparkSVG(series){ const w=58,h=18,n=series.length; if(n<2)return '';
+ const max=Math.max.apply(null,series),min=Math.min.apply(null,series),rng=(max-min)||1;
+ const xs=i=>3+i*(w-6)/(n-1), ys=v=>h-2.5-(v-min)/rng*(h-6);
+ const pts=series.map((v,i)=>xs(i).toFixed(1)+','+ys(v).toFixed(1)).join(' ');
+ const ci=ORDER.findIndex(o=>o.key===current);
+ const col=series[n-1]>series[0]?'var(--green)':series[n-1]<series[0]?'var(--red)':'var(--muted)';
+ const cur= ci>=0?'<circle cx="'+xs(ci).toFixed(1)+'" cy="'+ys(series[ci]).toFixed(1)+'" r="2.3" style="fill:'+col+'"/>':'';
+ return '<svg class="spark" viewBox="0 0 '+w+' '+h+'" preserveAspectRatio="none" aria-hidden="true"><polyline points="'+pts+'" style="fill:none;stroke:'+col+';stroke-width:1.4"/>'+cur+'</svg>';
+}
+function weekAnim(){ const wv=$("#weeklyView"); if(!wv)return; wv.classList.remove('weekswap'); void wv.offsetWidth; wv.classList.add('weekswap'); }
+function fillKpis(){ $("#kpis").innerHTML=W().kpis.map(k=>{
+  const sp = k.spark ? (Array.isArray(k.spark)?k.spark:weekSeries(k.spark)) : null;
+  const spark = (sp&&sp.length>1) ? '<div class="kspark">'+sparkSVG(sp)+'<span>3-wk</span></div>' : '';
+  return '<div class="kpi"><div class="v">'+k.v+'</div><div class="l">'+k.l+'</div><div class="t '+k.c+'">'+k.t+'</div>'+spark+'</div>';
+ }).join(""); }
+function fillWhatsnew(){$("#whatsnew").innerHTML=W().whatsnew.map(w=>`<div style="display:flex;gap:9px;align-items:flex-start"><span class="pill" style="background:${w.bg};color:${w.c};border:1px solid ${w.c};flex:none;min-width:74px;text-align:center">${w.tag}</span><span style="font-size:12.7px;color:var(--ink);line-height:1.4">${w.t}</span></div>`).join("");}
+function fillBig(){$("#bigwrap").innerHTML=W().big.map(c=>`<div class="card"><h3>${c.title}</h3><div class="cap">${c.cap}</div>${c.rows.map(r=>`<div class="barrow"><div class="lab">${r.lab}</div><div class="track"><div class="fill" style="width:${r.w}%;background:${r.c}">${r.val}</div></div></div>`).join("")}<div class="note">${c.note}</div></div>`).join("");}
+function fillCtbc(){
+ $("#ctbcReport").innerHTML=W().ctbcReport.map(c=>`<p style="margin:0 0 10px;font-size:13px"><span class="pill ctbc-badge">CTBC</span> &nbsp;<b>${c.b}</b> — ${c.t}</p>`).join("");
+ $("#ctbcWider").innerHTML=WIDER.map(c=>`<p style="margin:0 0 10px;font-size:13px"><b>${c.t}</b> — <span style="color:var(--muted)">${c.d}</span></p>`).join("");
+}
+function fillLadder(){$("#ladder").innerHTML=W().ladder.map(l=>`<div class="lad"><div class="seg" style="width:${Math.max(l.w,90)}px;background:${l.c}">${l.bp}</div><div class="who">${l.who}</div></div>`).join("");}
+function fillRisks(){$("#risks").innerHTML=W().risks.map(r=>`<div class="rk ${r.cls}"><h4>${r.h}<span class="sev">${r.sev}</span></h4><p>${r.p}</p></div>`).join("");}
+function fillGloss(){$("#glossary").innerHTML=GLOSS.map((g,i)=>`<details class="gl" ${i==0?"open":""}><summary>${g[0]}</summary><div class="gc"><dl>${g[1].map(t=>`<dt>${t[0]}</dt><dd>${t[1]}</dd>`).join("")}</dl></div></details>`).join("");}
+
+function fillSecondary(){
+ $("#secondary").innerHTML=SECONDARY.map(s=>{
+  const w=Math.max(s.bid/102*100,1.2);
+  const col=s.bid<70?'var(--red)':s.bid<95?'var(--amber)':'var(--green)';
+  const chg=s.chg>0?`<span style="color:var(--green)">▲${s.chg}</span>`:s.chg<0?`<span style="color:var(--red)">▼${Math.abs(s.chg)}</span>`:`<span style="color:var(--muted)">flat</span>`;
+  const val=s.bid<1?s.bid.toFixed(2):s.bid.toFixed(s.bid<100?1:2);
+  return `<div class="barrow"><div class="lab" style="width:210px;line-height:1.25"><span style="color:var(--ink)">${s.name}</span><br><span style="font-size:10.5px;color:var(--muted)">${s.region}</span></div><div class="track"><div class="fill" style="width:${w}%;background:${col}"></div></div><div style="width:90px;text-align:right;font-size:12px;font-weight:600;color:${col}">${val} ${chg}</div></div>`;
+ }).join("");
+}
+function fillSecDist(){
+ const bins=Array(10).fill(0);
+ SECONDARY.forEach(x=>{ bins[Math.min(Math.floor(x.bid/10),9)]++; });
+ const max=Math.max.apply(null,bins)||1;
+ const colOf=mid=> mid<70?'var(--red)':mid<95?'var(--amber)':'var(--green)';
+ let bars='';
+ for(let i=0;i<10;i++){ const c=bins[i], mid=i*10+5, h=Math.round(c/max*70);
+  bars+='<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end">'
+   +'<div style="font-size:10px;color:var(--muted);height:12px">'+(c||'')+'</div>'
+   +'<div title="'+(i*10)+'\u2013'+(i*10+10)+': '+c+' name'+(c===1?'':'s')+'" style="width:78%;height:'+(c?Math.max(h,3):0)+'px;background:'+(c?colOf(mid):'transparent')+';border-radius:3px 3px 0 0"></div>'
+   +'</div>';
+ }
+ $("#secDist").innerHTML='<div style="display:flex;align-items:flex-end;gap:3px;height:92px;margin-top:4px;border-bottom:1px solid var(--line)">'+bars+'</div>'
+  +'<div style="display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-top:3px"><span>0</span><span>50</span><span>100 (par)</span></div>'
+  +'<div style="font-size:10.5px;color:var(--muted);margin-top:5px"><span style="color:var(--red)">\u25a0</span> distress &lt;70 &nbsp;<span style="color:var(--amber)">\u25a0</span> 70\u201395 &nbsp;<span style="color:var(--green)">\u25a0</span> near par \u226595</div>';
+}
+function fillSecMovers(){
+ const movers=SECONDARY.filter(x=>x.chg).slice().sort((a,b)=>Math.abs(b.chg)-Math.abs(a.chg));
+ const flat=SECONDARY.length-movers.length;
+ const max=Math.max.apply(null,movers.map(x=>Math.abs(x.chg)).concat([0.5]));
+ let rows='';
+ movers.forEach(x=>{ const up=x.chg>0, w=(Math.abs(x.chg)/max*46).toFixed(1), c=up?'var(--green)':'var(--red)', nm=x.name.replace(/\s*\(.*\)/,'');
+  rows+='<div style="display:flex;align-items:center;gap:7px;margin:7px 0;font-size:11.5px">'
+   +'<div style="width:104px;text-align:right;color:var(--ink);line-height:1.15">'+nm+'</div>'
+   +'<div style="flex:1;position:relative;height:13px;background:var(--surface2);border-radius:3px">'
+    +'<div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:var(--line)"></div>'
+    +(up?'<div style="position:absolute;left:50%;width:'+w+'%;top:1px;bottom:1px;background:var(--green);border-radius:0 3px 3px 0"></div>'
+        :'<div style="position:absolute;right:50%;width:'+w+'%;top:1px;bottom:1px;background:var(--red);border-radius:3px 0 0 3px"></div>')
+   +'</div>'
+   +'<div style="width:40px;text-align:right;font-weight:600;color:'+c+'">'+(up?'+':'\u2212')+Math.abs(x.chg)+'</div>'
+  +'</div>';
+ });
+ $("#secMovers").innerHTML=rows+'<div style="font-size:10.5px;color:var(--muted);margin-top:7px">'+flat+' of '+SECONDARY.length+' names unchanged this month \u00b7 up = recovering, down = deteriorating.</div>';
+}
+function fillSecLinks(){
+ const links=SECONDARY.filter(x=>x.link);
+ if(!links.length){ $("#secLinks").innerHTML=''; return; }
+ const zoneOf=b=> b<70?{t:'distressed',c:'var(--red)'}: b<95?{t:'discounted',c:'var(--amber)'}:{t:'near par',c:'var(--green)'};
+ let cards='';
+ links.forEach(x=>{ const wk=ORDER.find(o=>o.key===x.link.wk), d=(WEEKS[x.link.wk].deals||[]).find(z=>z.borrower===x.link.borrower), z=zoneOf(x.bid);
+  const bv=x.bid<1?x.bid.toFixed(2):x.bid.toFixed(x.bid<100?1:2); const chg=x.chg>0?'\u25b2'+x.chg:x.chg<0?'\u25bc'+Math.abs(x.chg):'flat';
+  cards+='<div class="card" style="box-shadow:none;background:var(--surface2)">'
+   +'<div style="font-weight:700;font-size:13px">'+x.name+' '+(d&&d.ctbc?'<span class="pill ctbc-badge">CTBC</span>':'')+'</div>'
+   +'<div style="font-size:10.5px;font-weight:600;letter-spacing:.4px;color:var(--navy2);margin-top:8px">PRIMARY \u00b7 '+(wk?wk.label:x.link.wk)+'</div>'
+   +'<div style="font-size:12px;line-height:1.4">'+(d?(d.borrower+' \u2014 '+d.display+' \u00b7 '+d.pricing):'\u2014')+'</div>'
+   +'<div style="font-size:10.5px;font-weight:600;letter-spacing:.4px;color:var(--navy2);margin-top:9px">SECONDARY \u00b7 May 2026</div>'
+   +'<div style="font-size:12px">existing loan trades at <b style="color:'+z.c+'">'+bv+'</b> \u2014 '+z.t+' <span style="color:'+(x.chg>0?'var(--green)':x.chg<0?'var(--red)':'var(--muted)')+'">'+chg+'</span></div>'
+  +'</div>';
+ });
+ $("#secLinks").innerHTML='<div style="font-weight:600;font-size:13px">Seen in both markets \u2014 new issuance vs where existing paper trades</div>'
+  +'<div class="cap" style="margin:2px 0 9px">A borrower tapping fresh debt <i>and</i> trading near par is healthy on both fronts; by contrast the distressed tail (Sritex, MMI, Saijan\u2026) trades at deep discounts with no new-issue access at all.</div>'
+  +'<div class="grid2">'+cards+'</div>';
+}
+function populateFilters(){
+ const co=$("#country"),se=$("#sector");
+ co.innerHTML='<option value="">All countries</option>';
+ se.innerHTML='<option value="">All sectors</option>';
+ [...new Set(DEALS.map(d=>d.country))].sort().forEach(c=>co.add(new Option(c,c)));
+ [...new Set(DEALS.map(d=>d.sector))].sort().forEach(c=>se.add(new Option(c,c)));
+}
+function badge(c){return c===1?'<span class="pill ctbc-badge">CTBC</span>':'';}
+function filteredDeals(){
+ const q=$("#search").value.toLowerCase(),co=$("#country").value,se=$("#sector").value,only=$("#ctbcOnly").checked;
+ let d=DEALS.filter(x=>(!co||x.country===co)&&(!se||x.sector===se)&&(!only||x.ctbc>0)&&(!q||(x.borrower+x.leads+x.pricing+x.sector).toLowerCase().includes(q)));
+ d.sort((a,b)=>{let A=a[sortK],B=b[sortK];if(A==null)return 1;if(B==null)return -1;if(typeof A==="string")return sortDir*A.localeCompare(B);return sortDir*(A-B);});
+ return d;
+}
+function renderTable(){
+ const d=filteredDeals();
+ $("#rows").innerHTML=d.map((x,i)=>{
+  const tm=THEME_META[x.theme], sp=x.spreadBp==null?'—':(x.spreadBp+'bp'+(x.basis?' / '+x.basis:''));
+  const aria=(x.borrower+', '+x.country+', '+x.sector+', '+(x.amtUSD==null?'size undisclosed':money(x.amtUSD))+(x.ctbc?', CTBC-involved':'')).replace(/"/g,'');
+  const detail='<tr class="ddetail" id="dd'+i+'" hidden><td colspan="8"><div class="ddwrap">'
+    +'<div><span class="ddk">HQ / location</span>'+(x.loc||x.country)+' · '+(x.locType||'HQ')+'</div>'
+    +'<div><span class="ddk">Theme</span>'+(tm?tm.label:(x.theme||'—'))+'</div>'
+    +'<div><span class="ddk">Spread</span>'+sp+'</div>'
+    +'<div><span class="ddk">CTBC</span>'+(x.ctbc?'Lender / MLAB / owner':'Not involved')+'</div>'
+    +(x.flowFrom?'<div style="grid-column:1/-1"><span class="ddk">Cross-border flow</span>'+x.flowFrom+' → '+x.country+'</div>':'')
+    +'<div style="grid-column:1/-1"><span class="ddk">Pricing / notes</span>'+x.pricing+'</div>'
+    +'</div></td></tr>';
+  return '<tr class="drow" tabindex="0" role="button" aria-expanded="false" aria-controls="dd'+i+'" aria-label="'+aria+' — activate for full detail">'
+    +'<td><span class="exptri" aria-hidden="true">▸</span> <span class="b">'+x.borrower+'</span> '+badge(x.ctbc)+'</td>'
+    +'<td>'+x.country+'</td>'
+    +'<td><span class="pill sec-tag">'+secIcon(x.sector)+x.sector+'</span></td>'
+    +'<td>'+(x.amtUSD==null?'—':x.amtUSD.toLocaleString())+'</td>'
+    +'<td>'+x.display+'</td><td>'+x.tenor+'</td><td>'+x.leads+'</td><td>'+x.pricing+'</td></tr>'+detail;
+ }).join("");
+ $("#count").textContent=d.length+" of "+DEALS.length+" deals · "+money(d.reduce((s,x)=>s+(x.amtUSD||0),0));
+ wireRows();
+}
+function wireRows(){
+ const rows=[].slice.call($("#rows").querySelectorAll('tr.drow'));
+ rows.forEach((r,idx)=>{ const det=document.getElementById(r.getAttribute('aria-controls'));
+  const toggle=()=>{const open=r.getAttribute('aria-expanded')==='true'; r.setAttribute('aria-expanded',String(!open)); if(det)det.hidden=open; r.classList.toggle('open',!open);};
+  r.addEventListener('click',toggle);
+  r.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle();}
+    else if(e.key==='ArrowDown'&&rows[idx+1]){e.preventDefault();rows[idx+1].focus();}
+    else if(e.key==='ArrowUp'&&rows[idx-1]){e.preventDefault();rows[idx-1].focus();} });
+ });
+}
+function exportCSV(){
+ const cols=[["borrower","Borrower"],["country","Country"],["sector","Sector"],["amtUSD","Size US$m"],["display","Headline size"],["tenor","Tenor"],["leads","Lead banks (MLABs)"],["pricing","Pricing / notes"],["theme","Theme"],["spreadBp","Spread bp"],["basis","Basis"],["loc","HQ / location"],["ctbc","CTBC involved"]];
+ const esc=v=>{ if(v==null)return ''; v=String(v); return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; };
+ const body=filteredDeals().map(d=>cols.map(c=>{ let v=d[c[0]]; if(c[0]==='theme')v=(THEME_META[d.theme]||{}).label||d.theme||''; if(c[0]==='ctbc')v=d.ctbc?'Yes':'No'; return esc(v); }).join(',')).join('\n');
+ const csv=cols.map(c=>esc(c[1])).join(',')+'\n'+body;
+ const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}), url=URL.createObjectURL(blob), a=document.createElement('a');
+ a.href=url; a.download='CTBC_deals_'+current+'.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1500);
+}
+/* ===================== WORLD DEAL MAP ===================== */
+const MAP_W2=1000, MAP_H2=420;
+function projectW(lon,lat){ var l=((lon-150+540)%360); return [l/360*MAP_W2, (80-lat)/140*MAP_H2]; }
+const APAC_VIEW={x:210,y:95,w:450,h:275};
+const WORLD_VIEW={x:30,y:50,w:940,h:360};
+let mapView={x:APAC_VIEW.x,y:APAC_VIEW.y,w:APAC_VIEW.w,h:APAC_VIEW.h};
+const TW_ORIGIN=[121.56,25.04];
+function dotPR(amt){ return Math.max(3.5, Math.min(12, 0.5*Math.sqrt(amt||40))); }
+function arcPath(p1,p2){ const x1=p1[0],y1=p1[1],x2=p2[0],y2=p2[1],mx=(x1+x2)/2,my=(y1+y2)/2,dx=x2-x1,dy=y2-y1,len=Math.hypot(dx,dy)||1,lift=Math.min(len*0.22,90); const cx=mx-dy/len*lift,cy=my+dx/len*lift; return `M${x1.toFixed(1)},${y1.toFixed(1)} Q${cx.toFixed(1)},${cy.toFixed(1)} ${x2.toFixed(1)},${y2.toFixed(1)}`; }
+const LAND_D=(function(){ let d=""; for(const r of WORLD_LAND){ for(let i=0;i<r.length;i+=2){ const p=projectW(r[i],r[i+1]); d+=(i===0?"M":"L")+p[0].toFixed(1)+","+p[1].toFixed(1); } d+="Z"; } return d; })();
+let mapDots=[];
+function buildDots(){
+ const list=W().deals.filter(d=>d.lon!=null&&d.lat!=null).map(d=>{ const p=projectW(d.lon,d.lat); return {d:d, x0:p[0], y0:p[1], x:p[0], y:p[1], pr:dotPR(d.amtUSD), grp:null}; });
+ list.sort((a,b)=>b.pr-a.pr); // draw biggest first so smaller dots stay on top and clickable
+ const cell={};
+ list.forEach(o=>{ const k=Math.round(o.x0)+"|"+Math.round(o.y0); (cell[k]||(cell[k]=[])).push(o); });
+ Object.values(cell).forEach(g=>{ g.forEach(o=>o.grp=g);
+  if(g.length<2) return;
+  const R=Math.min(0.3+0.08*g.length, 0.6); // very tight rosette (<=~0.4 deg) so stacked dots stay on the city; card nav + zoom reach each
+  g.forEach((o,k)=>{ const ang=k*2.39996, rr=R*Math.sqrt((k+0.5)/g.length); o.x=o.x0+Math.cos(ang)*rr; o.y=o.y0+Math.sin(ang)*rr; });
+ });
+ mapDots=list;
+}
+
+function renderMap(){
+ const host=$("#mapsvg"); if(!host)return;
+ closeCard(); mapView={x:APAC_VIEW.x,y:APAC_VIEW.y,w:APAC_VIEW.w,h:APAC_VIEW.h}; buildDots();
+ let arcs="";
+ W().deals.forEach(d=>{ if(!d.flowFrom||d.lon==null||d.lat==null)return; const o=projectW(TW_ORIGIN[0],TW_ORIGIN[1]),t=projectW(d.lon,d.lat),isC=d.ctbc>0;
+  arcs+=`<path class="flow${isC?'':' muted'}" d="${arcPath(o,t)}"><title>Taiwan → ${d.loc||d.country}: ${d.borrower} · ${money(d.amtUSD)}</title></path>`; });
+ let dots="";
+ mapDots.forEach((o,i)=>{ const d=o.d; dots+=`<circle class="dot${d.ctbc>0?' ctbc':''}" data-i="${i}" tabindex="0" role="button" aria-label="${(d.borrower+', '+(d.loc||d.country)+', '+(d.locType||'HQ')+', '+money(d.amtUSD)+(d.ctbc>0?', CTBC-involved':'')).replace(/&/g,'and').replace(/"/g,'')}" cx="${o.x.toFixed(1)}" cy="${o.y.toFixed(1)}" r="4" style="fill:${scol(d.sector)};fill-opacity:.82"></circle>`; });
+ host.innerHTML=`<svg id="mapsvgel" preserveAspectRatio="xMidYMid meet" role="group"><title>World map of this reading's deals</title><desc>Each dot is a financing plotted at the borrower's headquarters or project location; teal rings mark CTBC involvement and teal arcs show CTBC cross-border lending from Taiwan. The deal table below is the accessible data source.</desc><path class="land" d="${LAND_D}"></path>${arcs}${dots}</svg>`;
+ applyView();
+ host.querySelectorAll('circle.dot').forEach(c=>{
+  c.addEventListener('mouseenter',()=>{ const o=mapDots[+c.dataset.i]; showTip(c, o.d.borrower+' · '+money(o.d.amtUSD)); });
+  c.addEventListener('mouseleave',hideTip);
+  c.addEventListener('click',e=>{ e.stopPropagation(); selectDot(+c.dataset.i); });
+  c.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){e.preventDefault();selectDot(+c.dataset.i);} else if(e.key==='Escape'){closeCard();} });
+ });
+ buildMapLegend();
+}
+function applyView(){
+ const svg=$("#mapsvgel"); if(!svg)return;
+ svg.setAttribute('viewBox',`${mapView.x} ${mapView.y} ${mapView.w} ${mapView.h}`);
+ const pxW=svg.getBoundingClientRect().width||900, scale=mapView.w/pxW;
+ svg.querySelectorAll('circle.dot').forEach(c=>{ const o=mapDots[+c.dataset.i]; if(o)c.setAttribute('r',(o.pr*scale).toFixed(2)); });
+}
+function dotScreen(o){ const svg=$("#mapsvgel"),wrap=$("#mapwrap"),r=svg.getBoundingClientRect(),wr=wrap.getBoundingClientRect(); const sx=r.width/mapView.w,sy=r.height/mapView.h; return {px:(o.x-mapView.x)*sx+(r.left-wr.left), py:(o.y-mapView.y)*sy+(r.top-wr.top), wr:wr}; }
+function showTip(c, text){ const tip=$("#mapTip"); if(!tip)return; const o=mapDots[+c.dataset.i],s=dotScreen(o); tip.textContent=text; tip.style.left=s.px+'px'; tip.style.top=s.py+'px'; tip.style.opacity=1; }
+function hideTip(){ const t=$("#mapTip"); if(t)t.style.opacity=0; }
+function selectDot(i){
+ const o=mapDots[i],d=o.d,svg=$("#mapsvgel"); if(!svg)return;
+ svg.querySelectorAll('circle.dot').forEach(c=>c.classList.toggle('sel',+c.dataset.i===i));
+ const card=$("#dealcard"),s=dotScreen(o);
+ const tm=THEME_META[d.theme],sp=d.spreadBp==null?'\u2014':(d.spreadBp+'bp'+(d.basis?' / '+d.basis:''));
+ const grp=(o.grp&&o.grp.length>1)?o.grp:null, gi=grp?grp.indexOf(o):0;
+ const nav=grp?`<div class="cardnav"><button id="cardprev" aria-label="Previous deal here">\u2039</button><span>${gi+1} of ${grp.length} at this location</span><button id="cardnext" aria-label="Next deal here">\u203a</button></div>`:'';
+ card.innerHTML=`<span class="x" id="cardx" role="button" tabindex="0" aria-label="Close">\u00d7</span><h4>${d.borrower} ${d.ctbc>0?'<span class="pill ctbc-badge">CTBC</span>':''}</h4>`+
+  `<div class="meta">\ud83d\udccd ${d.loc||d.country} \u00b7 ${d.locType||'HQ'}${d.loc&&d.loc.indexOf(d.country)<0?' \u00b7 '+d.country:''}</div>`+nav+
+  `<dl><dt>Size</dt><dd>${d.display} (${money(d.amtUSD)})</dd><dt>Tenor</dt><dd>${d.tenor}</dd>`+
+  `<dt>Leads</dt><dd>${d.leads}</dd><dt>Pricing</dt><dd>${d.pricing}</dd>`+
+  `<dt>Theme</dt><dd>${tm?tm.label:d.theme}</dd><dt>Spread</dt><dd>${sp}</dd></dl>`+
+  `<div class="act" id="cardfilter">\u21a7 Filter the deal table to ${d.country}</div>`;
+ card.classList.add('show');
+ const cw=card.offsetWidth||290,ch=card.offsetHeight||220;
+ let left=Math.max(6,Math.min(s.wr.width-cw-6, s.px-cw/2));
+ let top=s.py-ch-14; if(top<6) top=s.py+16; top=Math.max(6,Math.min(s.wr.height-ch-6, top));
+ card.style.left=left+'px'; card.style.top=top+'px';
+ $("#cardx").addEventListener('click',ev=>{ev.stopPropagation();closeCard();});
+ $("#cardfilter").addEventListener('click',ev=>{ev.stopPropagation(); const co=$("#country"); if(co){co.value=d.country;renderTable();} });
+ if(grp){ $("#cardprev").addEventListener('click',ev=>{ev.stopPropagation(); selectDot(mapDots.indexOf(grp[(gi-1+grp.length)%grp.length])); }); $("#cardnext").addEventListener('click',ev=>{ev.stopPropagation(); selectDot(mapDots.indexOf(grp[(gi+1)%grp.length])); }); }
+}
+
+function closeCard(){ const card=$("#dealcard"); if(card)card.classList.remove('show'); const svg=$("#mapsvgel"); if(svg)svg.querySelectorAll('circle.dot.sel').forEach(c=>c.classList.remove('sel')); }
+function buildMapLegend(){
+ const present=[...new Set(W().deals.map(d=>d.sector))];
+ const order=SECTOR_ORDER.filter(s=>present.includes(s)).concat(present.filter(s=>SECTOR_ORDER.indexOf(s)<0));
+ $("#mapLegend").innerHTML=order.map(s=>`<span class="lg"><span class="sw" style="background:${scol(s)}"></span>${s}</span>`).join("")+
+  `<span class="lg"><span class="sw" style="background:transparent;border:2px solid var(--ctbc)"></span>CTBC involved</span>`+
+  `<span class="lg"><span class="sw" style="width:16px;height:0;border-top:2px dashed var(--ctbc)"></span>CTBC cross-border</span>`;
+ $("#mapOff").innerHTML=`<span style="font-style:italic">Dots sit at each borrower's HQ — or the project / asset site for project finance (data centres, power plants, rail). Globally-sourced borrowers (Chile, Benin, Dublin, the US Gulf) appear in their true place; hit “World” to see them.</span>`;
+}
+function clampView(){
+ const a=mapView.w/mapView.h, maxW=Math.min(MAP_W2,MAP_H2*a);
+ mapView.w=Math.max(8,Math.min(maxW,mapView.w)); mapView.h=mapView.w/a;
+ mapView.x=Math.max(0,Math.min(MAP_W2-mapView.w,mapView.x));
+ mapView.y=Math.max(0,Math.min(MAP_H2-mapView.h,mapView.y));
+}
+function zoomAt(factor, cx, cy){ closeCard(); const a=mapView.w/mapView.h, maxW=Math.min(MAP_W2,MAP_H2*a); const nw=Math.max(8,Math.min(maxW,mapView.w*factor)), eff=nw/mapView.w; mapView.x=cx-(cx-mapView.x)*eff; mapView.y=cy-(cy-mapView.y)*eff; mapView.w=nw; mapView.h=nw/a; clampView(); applyView(); hideTip(); }
+function setMapView(v){ mapView={x:v.x,y:v.y,w:v.w,h:v.h}; applyView(); hideTip(); closeCard(); }
+function initMapControls(){
+ const wrap=$("#mapwrap"); if(!wrap||wrap.dataset.wired)return; wrap.dataset.wired="1";
+ wrap.addEventListener('wheel',e=>{ if(!e.ctrlKey&&!e.metaKey)return; const svg=$("#mapsvgel"); if(!svg)return; e.preventDefault(); const r=svg.getBoundingClientRect(); const cx=mapView.x+(e.clientX-r.left)/r.width*mapView.w, cy=mapView.y+(e.clientY-r.top)/r.height*mapView.h; zoomAt(e.deltaY>0?1.15:0.87, cx, cy); },{passive:false});
+ let drag=null;
+ wrap.addEventListener('mousedown',e=>{ if(e.target.closest('.mapctrls')||e.target.closest('.dealcard')||e.target.closest('circle.dot'))return; const svg=$("#mapsvgel"); if(!svg)return; closeCard(); drag={x:e.clientX,y:e.clientY,vx:mapView.x,vy:mapView.y,rw:svg.getBoundingClientRect().width}; svg.classList.add('drag'); });
+ window.addEventListener('mousemove',e=>{ if(!drag)return; const svg=$("#mapsvgel"); if(!svg){drag=null;return;} const sc=mapView.w/drag.rw; mapView.x=drag.vx-(e.clientX-drag.x)*sc; mapView.y=drag.vy-(e.clientY-drag.y)*sc; clampView(); svg.setAttribute('viewBox',`${mapView.x} ${mapView.y} ${mapView.w} ${mapView.h}`); });
+ window.addEventListener('mouseup',()=>{ if(drag){const svg=$("#mapsvgel"); if(svg)svg.classList.remove('drag');} drag=null; });
+ $("#mapZin").addEventListener('click',()=>zoomAt(0.8, mapView.x+mapView.w/2, mapView.y+mapView.h/2));
+ $("#mapZout").addEventListener('click',()=>zoomAt(1.25, mapView.x+mapView.w/2, mapView.y+mapView.h/2));
+ $("#mapApac").addEventListener('click',()=>setMapView(APAC_VIEW));
+ $("#mapWorld").addEventListener('click',()=>setMapView(WORLD_VIEW));
+ let rsz; window.addEventListener('resize',()=>{ clearTimeout(rsz); rsz=setTimeout(()=>{ const wv=$("#weeklyView"); if(wv&&getComputedStyle(wv).display!=='none') applyView(); },150); });
+}
+
+function renderWeek(){fillMeta();fillKpis();fillWhatsnew();fillBig();fillCtbc();fillLadder();fillRisks();populateFilters();renderTable();renderMap();}
+function switchWeek(k){
+ if(k===current)return;
+ current=k;DEALS=W().deals;sortK="amtUSD";sortDir=-1;
+ ["search","country","sector"].forEach(id=>$("#"+id).value="");$("#ctbcOnly").checked=false;
+ document.querySelectorAll("#dateseg button").forEach(b=>b.classList.toggle("active",b.dataset.k===k));
+ document.querySelectorAll("thead th").forEach(t=>{const a=t.querySelector(".ar");if(a)a.textContent="";t.setAttribute("aria-sort","none");});
+ const am=document.querySelector('thead th[data-k="amtUSD"]'); am.querySelector(".ar").textContent="▼"; am.setAttribute("aria-sort","descending");
+ renderWeek(); weekAnim();
+}
+
+["search","sector","ctbcOnly"].forEach(id=>$("#"+id).addEventListener("input",renderTable));
+$("#country").addEventListener("input",renderTable);
+document.querySelectorAll("thead th").forEach(th=>{
+ const doSort=()=>{const k=th.dataset.k;if(sortK===k)sortDir*=-1;else{sortK=k;sortDir=(k==="amtUSD")?-1:1;}
+  document.querySelectorAll("thead th").forEach(t=>{const a=t.querySelector(".ar");if(a)a.textContent="";t.setAttribute("aria-sort","none");});
+  th.querySelector(".ar").textContent=sortDir<0?"▼":"▲"; th.setAttribute("aria-sort",sortDir<0?"descending":"ascending"); renderTable();};
+ th.addEventListener("click",doSort);
+ th.addEventListener("keydown",e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();doSort();}});
+});
+$("#themeBtn").addEventListener("click",()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==="dark"?"light":"dark";});
+$("#presentBtn").addEventListener("click",function(){const r=document.documentElement,on=r.dataset.present==="on";r.dataset.present=on?"":"on";this.classList.toggle("on",!on);this.setAttribute("aria-pressed",String(!on));});
+$("#csvBtn").addEventListener("click",exportCSV);
+if(window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches)document.documentElement.dataset.theme="dark";
+
+/* ===================== TRENDS (cross-week) ===================== */
+const THEME_META={
+ ai_semis:{label:"AI & semiconductors",col:"var(--ch-teal)"},
+ ai_dc:{label:"AI data centres",col:"var(--ch-cyan)"},
+ brokerage:{label:"Brokerage wave",col:"var(--ch-navy)"},
+ green_infra:{label:"Green & infrastructure",col:"var(--ch-green)"},
+ property:{label:"Property & real estate",col:"var(--ch-rose)"},
+ ma_lbo:{label:"M&A / LBO",col:"var(--ch-red)"},
+ fin_leasing:{label:"Financials & leasing",col:"var(--ch-slate)"},
+ corp_other:{label:"Corporate & other",col:"var(--ch-amber)"},
+};
+const THEME_ORDER=["ai_semis","ai_dc","brokerage","green_infra","property","ma_lbo","fin_leasing","corp_other"];
+const SECTOR_ORDER=["AI / Semiconductors","Data centers","Financials","Green & infrastructure","Energy & utilities","Real estate","Industrials & other","Consumer","Education","Healthcare"];
+const SECTOR_COL={"AI / Semiconductors":"var(--ch-teal)","Data centers":"var(--ch-cyan)","Financials":"var(--ch-navy)","Green & infrastructure":"var(--ch-green)","Energy & utilities":"var(--ch-purple)","Real estate":"var(--ch-rose)","Industrials & other":"var(--ch-slate)","Consumer":"var(--ch-amber)","Education":"var(--ch-blue)","Healthcare":"var(--ch-red)"};
+const scol=s=>SECTOR_COL[s]||"var(--ch-brown)";
+const tmeta=k=>THEME_META[k]||{label:k,col:"var(--ch-brown)"};
+const TRENDS_NARRATIVE=`<b>Three weeks in, the story is in the change.</b> The Jun 1 → 8 → 15 arc shows a clear rotation in APAC loan supply: the Taiwan brokerage wave builds early and <b>crests at Jun 8</b> — a dozen securities houses (incl. CTBC Securities) in the market at once — then tapers to a single broker by Jun 15, just as an <b>AI &amp; semiconductor surge</b> takes the lead (ASE, Macronix, Phison, Hon Hai and a cluster of PCB / chip-distribution names). Underneath both runs a steady <b>green &amp; infrastructure</b> thread (offshore wind, rail, ports, power, LNG) and a persistent <b>property-distress</b> signal (Vanke, Yuexiu). CTBC's involvement rotates across brokerage, Taiwan project finance and semiconductors rather than sitting in any one week.`;
+
+function chrono(){return ORDER.map(o=>({key:o.key,label:o.label,deals:WEEKS[o.key].deals}));}
+const vol=ds=>ds.reduce((s,d)=>s+(d.amtUSD||0),0);
+function bnTick(v){return v>=1000?(v/1000).toFixed(v>=10000?0:1):String(Math.round(v));}
+function niceTop(v){if(v<=0)return 1;const p=Math.pow(10,Math.floor(Math.log10(v)));const steps=[1,1.5,2,2.5,3,4,5,6,8,10];const n=v/p;for(const s of steps){if(n<=s+1e-9)return s*p;}return 10*p;}
+
+function stackedSVG(groups,opts){
+ opts=opts||{};
+ const W=opts.W||720,H=opts.H||300,mL=46,mR=14,mT=opts.mT||20,mB=34,pw=W-mL-mR,ph=H-mT-mB;
+ let max=0;groups.forEach(g=>{g._t=g.segs.reduce((s,x)=>s+x.val,0);if(g._t>max)max=g._t;});
+ const top=niceTop(max||1),yOf=v=>mT+ph*(1-v/top),nt=top<=5?Math.round(top):5;
+ let grid="";
+ for(let i=0;i<=nt;i++){const v=top*i/nt,y=yOf(v);
+  grid+=`<line class="grid" x1="${mL}" y1="${y.toFixed(1)}" x2="${mL+pw}" y2="${y.toFixed(1)}"/>`;
+  grid+=`<text class="axlab" x="${mL-7}" y="${(y+3.6).toFixed(1)}" text-anchor="end">${opts.yfmt?opts.yfmt(v):Math.round(v)}</text>`;}
+ if(opts.yUnit)grid+=`<text class="axlab" x="${mL}" y="${(mT-7).toFixed(1)}" text-anchor="start">${opts.yUnit}</text>`;
+ const gw=pw/groups.length,bw=Math.min(gw*0.5,84);
+ let bars="";
+ groups.forEach((grp,gi)=>{
+  const cx=mL+gw*gi+gw/2,x=cx-bw/2;let acc=0;
+  grp.segs.forEach(s=>{if(s.val<=0)return;const h=ph*s.val/top,y=yOf(acc+s.val);
+   bars+=`<rect class="bar-seg" x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(h,0).toFixed(1)}" rx="2" style="fill:${s.col}"><title>${s.title}: ${opts.tfmt?opts.tfmt(s.val):s.val}</title></rect>`;
+   acc+=s.val;});
+  bars+=`<text class="axval" x="${cx.toFixed(1)}" y="${(yOf(grp._t)-6).toFixed(1)}" text-anchor="middle">${opts.totalFmt?opts.totalFmt(grp._t):Math.round(grp._t)}</text>`;
+  bars+=`<text class="axlab" x="${cx.toFixed(1)}" y="${(H-12).toFixed(1)}" text-anchor="middle">${grp.label}</text>`;});
+ const ax=`<line class="axis" x1="${mL}" y1="${mT}" x2="${mL}" y2="${(mT+ph).toFixed(1)}"/><line class="axis" x1="${mL}" y1="${(mT+ph).toFixed(1)}" x2="${mL+pw}" y2="${(mT+ph).toFixed(1)}"/>`;
+ return `<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${grid}${ax}${bars}</svg>`;
+}
+function buildLegend(elId,items,muted,rerender){
+ const el=$("#"+elId);
+ el.innerHTML=items.map(it=>`<span class="lg ${muted.has(it.key)?'off':''}" data-k="${it.key}"><span class="sw" style="background:${it.col}"></span>${it.label}</span>`).join("");
+ el.querySelectorAll('.lg').forEach(s=>s.addEventListener('click',()=>{const k=s.dataset.k;muted.has(k)?muted.delete(k):muted.add(k);rerender();}));
+}
+
+function renderVolume(){
+ const ws=chrono();
+ const groups=ws.map(w=>({label:w.label,segs:[{key:'v',col:'var(--ctbc)',val:vol(w.deals),title:'Volume'}]}));
+ $("#chartVolume").innerHTML=stackedSVG(groups,{W:430,H:280,yfmt:bnTick,yUnit:'US$bn',tfmt:money,totalFmt:money});
+ let big=null;ws.forEach(w=>w.deals.forEach(d=>{if(d.amtUSD!=null&&(!big||d.amtUSD>big.amtUSD))big={borrower:d.borrower,amtUSD:d.amtUSD,wk:w.label};}));
+ $("#noteVolume").innerHTML=`Totals sum every disclosed-size financing in each reading. Largest single deal: <b>${big.borrower}</b> ${money(big.amtUSD)} (${big.wk}).`;
+}
+function renderCtbc(){
+ const ws=chrono();
+ const groups=ws.map(w=>({label:w.label,segs:[{key:'c',col:'var(--ctbc)',val:w.deals.filter(d=>d.ctbc>0).length,title:'CTBC deals'}]}));
+ $("#chartCtbc").innerHTML=stackedSVG(groups,{W:430,H:280,yfmt:v=>Math.round(v),yUnit:'deals',totalFmt:t=>Math.round(t),tfmt:v=>Math.round(v)});
+ const parts=ws.map(w=>{const n=w.deals.filter(d=>d.ctbc>0).length;return `${w.label}: ${n} (${Math.round(100*n/w.deals.length)}%)`;});
+ $("#noteCtbc").innerHTML="CTBC as lender, MLAB or owner — "+parts.join(" · ")+".";
+}
+let sectorMuted=new Set();
+function renderSector(){
+ const ws=chrono();
+ const present=SECTOR_ORDER.filter(s=>ws.some(w=>w.deals.some(d=>d.sector===s)));
+ ws.forEach(w=>w.deals.forEach(d=>{if(!present.includes(d.sector))present.push(d.sector);}));
+ const groups=ws.map(w=>({label:w.label,segs:present.filter(s=>!sectorMuted.has(s)).map(s=>({key:s,col:scol(s),val:w.deals.filter(d=>d.sector===s).length,title:s})).filter(x=>x.val>0)}));
+ $("#chartSector").innerHTML=stackedSVG(groups,{W:720,H:320,yfmt:v=>Math.round(v),yUnit:'deals',totalFmt:t=>Math.round(t),tfmt:v=>Math.round(v)});
+ buildLegend('legendSector',present.map(s=>({key:s,label:s,col:scol(s)})),sectorMuted,renderSector);
+}
+let themeMuted=new Set(),themeMetric='vol';
+function renderTheme(){
+ const ws=chrono();
+ const present=THEME_ORDER.filter(k=>ws.some(w=>w.deals.some(d=>d.theme===k)));
+ const useV=themeMetric==='vol';
+ const val=(deals,k)=>{const f=deals.filter(d=>d.theme===k);return useV?vol(f):f.length;};
+ const groups=ws.map(w=>({label:w.label,segs:present.filter(k=>!themeMuted.has(k)).map(k=>({key:k,col:tmeta(k).col,val:val(w.deals,k),title:tmeta(k).label})).filter(x=>x.val>0)}));
+ $("#chartTheme").innerHTML=stackedSVG(groups,{W:720,H:340,yfmt:useV?bnTick:(v=>Math.round(v)),yUnit:useV?'US$bn':'deals',totalFmt:useV?money:(t=>Math.round(t)),tfmt:useV?money:(v=>Math.round(v))});
+ buildLegend('legendTheme',present.map(k=>({key:k,label:tmeta(k).label,col:tmeta(k).col})),themeMuted,renderTheme);
+ const lead=w=>{let best=null,bv=-1;present.forEach(k=>{const v=val(w.deals,k);if(v>bv){bv=v;best=k;}});return tmeta(best).label;};
+ let note="Lead theme "+(useV?"by volume":"by deal count")+" — "+ws.map(w=>`${w.label}: ${lead(w)}`).join(" · ")+".";
+ if(useV)note+=" Jun 8 financials volume is lifted by the US$9.4bn Nippon Life–Blackstone private-credit MOU — switch to Deals to see the brokerage wave by count.";
+ $("#noteTheme").textContent=note;
+}
+function setThemeMetric(m){themeMetric=m;document.querySelectorAll('#themeMetric button').forEach(b=>b.classList.toggle('active',b.dataset.m===m));renderTheme();}
+
+function scatterPoints(){
+ const wf=$("#scWeek").value,sf=$("#scSector").value,pts=[];
+ chrono().forEach(w=>{if(wf&&w.key!==wf)return;w.deals.forEach(d=>{if(d.spreadBp==null||d.amtUSD==null)return;if(sf&&d.sector!==sf)return;
+  pts.push({b:d.borrower,sec:d.sector,size:d.amtUSD,sp:d.spreadBp,basis:d.basis||"",wk:w.label,ctbc:d.ctbc});});});
+ return pts;
+}
+function renderScatter(){
+ const pts=scatterPoints(),host=$("#chartScatter"),tip='<div class="sc-tip" id="scTip"></div>';
+ const tot=chrono().reduce((s,w)=>s+w.deals.length,0);
+ if(!pts.length){host.innerHTML=tip+'<div class="note">No deals with both a disclosed spread and size for this filter.</div>';$("#scCount").textContent="0 plotted";$("#legendScatter").innerHTML="";return;}
+ const W=720,H=380,mL=50,mR=16,mT=18,mB=46,pw=W-mL-mR,ph=H-mT-mB;
+ const sizes=pts.map(p=>p.size),sps=pts.map(p=>p.sp);
+ const xmin=20,xticks=[25,50,100,250,500,1000,2500,5000,10000];
+ const xmax=xticks.find(t=>t>=Math.max(...sizes))||Math.max(...sizes);
+ const lx=v=>Math.log10(Math.max(v,1)),xOf=v=>mL+pw*(lx(v)-lx(xmin))/(lx(xmax)-lx(xmin));
+ const ymax=Math.max(50,Math.ceil(Math.max(...sps,0)/50)*50),ymin=Math.min(...sps,0)<0?Math.floor(Math.min(...sps)/50)*50:0;
+ const yOf=v=>mT+ph*(1-(v-ymin)/(ymax-ymin));
+ let g="";
+ for(let t=Math.ceil(ymin/100)*100;t<=ymax+1e-6;t+=100){const y=yOf(t);
+  g+=`<line class="grid" x1="${mL}" y1="${y.toFixed(1)}" x2="${mL+pw}" y2="${y.toFixed(1)}"/>`;
+  g+=`<text class="axlab" x="${mL-7}" y="${(y+3.6).toFixed(1)}" text-anchor="end">${t}</text>`;}
+ if(ymin<0){const z=yOf(0);g+=`<line class="axis" x1="${mL}" y1="${z.toFixed(1)}" x2="${mL+pw}" y2="${z.toFixed(1)}" stroke-dasharray="3 3"/>`;}
+ xticks.filter(t=>t>=xmin&&t<=xmax).forEach(t=>{const x=xOf(t);
+  g+=`<line class="grid" x1="${x.toFixed(1)}" y1="${mT}" x2="${x.toFixed(1)}" y2="${mT+ph}"/>`;
+  g+=`<text class="axlab" x="${x.toFixed(1)}" y="${(mT+ph+15).toFixed(1)}" text-anchor="middle">${t>=1000?(t/1000)+'bn':t}</text>`;});
+ g+=`<text class="axttl" x="${(mL+pw/2).toFixed(1)}" y="${(H-3).toFixed(1)}" text-anchor="middle">Loan size — US$m (log scale)</text>`;
+ g+=`<text class="axttl" transform="translate(13 ${(mT+ph/2).toFixed(1)}) rotate(-90)" text-anchor="middle">Spread over benchmark (bp)</text>`;
+ const ax=`<line class="axis" x1="${mL}" y1="${mT}" x2="${mL}" y2="${(mT+ph).toFixed(1)}"/><line class="axis" x1="${mL}" y1="${(mT+ph).toFixed(1)}" x2="${mL+pw}" y2="${(mT+ph).toFixed(1)}"/>`;
+ let dots="";
+ pts.forEach((p,i)=>{const cx=xOf(p.size),cy=yOf(p.sp);
+  dots+=`<circle class="pt" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="${p.ctbc?6:5}" style="fill:${scol(p.sec)};fill-opacity:.82${p.ctbc?';stroke:var(--ctbc);stroke-width:2':''}" data-x="${cx.toFixed(1)}" data-y="${cy.toFixed(1)}" data-i="${i}"></circle>`;});
+ host.innerHTML=tip+`<svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet">${g}${ax}${dots}</svg>`;
+ const INFO=pts.map(p=>`<div class='b'>${p.b}${p.ctbc?' · CTBC':''}</div><div class='m'>${p.wk} · ${p.sec}</div><div>${money(p.size)} · ${p.sp}bp${p.basis?' / '+p.basis:''}</div>`);
+ const tipEl=$("#scTip"),svg=host.querySelector('svg');
+ host.querySelectorAll('circle.pt').forEach(c=>{
+  c.addEventListener('mouseenter',()=>{const i=+c.dataset.i,r=svg.getBoundingClientRect(),hr=host.getBoundingClientRect();
+   tipEl.innerHTML=INFO[i];tipEl.style.left=((r.left-hr.left)+(+c.dataset.x)*r.width/W)+'px';tipEl.style.top=((r.top-hr.top)+(+c.dataset.y)*r.height/H)+'px';tipEl.style.opacity=1;});
+  c.addEventListener('mouseleave',()=>{tipEl.style.opacity=0;});});
+ const secs=[...new Set(pts.map(p=>p.sec))].sort();
+ $("#legendScatter").innerHTML=secs.map(s=>`<span class="lg"><span class="sw" style="background:${scol(s)}"></span>${s}</span>`).join("")+`<span class="lg"><span class="sw" style="background:transparent;border:2px solid var(--ctbc)"></span>CTBC-involved</span>`;
+ $("#scCount").textContent=pts.length+" of "+tot+" deals plotted";
+}
+function populateScatterFilters(){
+ const wk=$("#scWeek"),se=$("#scSector");
+ wk.innerHTML='<option value="">All weeks</option>';ORDER.forEach(o=>wk.add(new Option(o.label,o.key)));
+ const secs=new Set();chrono().forEach(w=>w.deals.forEach(d=>{if(d.spreadBp!=null&&d.amtUSD!=null)secs.add(d.sector);}));
+ se.innerHTML='<option value="">All sectors</option>';[...secs].sort().forEach(s=>se.add(new Option(s,s)));
+}
+
+function renderTrendKpis(){
+ const ws=chrono(),last=ws[ws.length-1],prev=ws[ws.length-2];
+ const td=ws.reduce((s,w)=>s+w.deals.length,0),dv=vol(last.deals)-vol(prev.deals);
+ const ctbcN=w=>w.deals.filter(d=>d.ctbc>0).length,ctbcTot=ws.reduce((s,w)=>s+ctbcN(w),0);
+ let best=null,bv=-1;THEME_ORDER.forEach(k=>{const v=vol(last.deals.filter(d=>d.theme===k));if(v>bv){bv=v;best=k;}});
+ const cards=[
+  {v:String(ws.length),l:`Readings tracked (${ws[0].label} → ${last.label})`,t:"Weekly cadence",c:""},
+  {v:String(td),l:"Financings tracked across all readings",t:"Live deal universe",c:""},
+  {v:money(vol(last.deals)),l:`Volume in the latest reading (${last.label})`,t:(dv>=0?"▲ ":"▼ ")+money(Math.abs(dv))+" vs prior",c:dv>=0?"up":"down"},
+  {v:`${ctbcN(last)} of ${last.deals.length}`,l:`CTBC-involved deals, latest reading · ${ctbcTot} across all`,t:"Franchise footprint",c:""},
+  {v:tmeta(best).label,l:`Largest theme by volume, ${last.label}`,t:"Lead rotates weekly",c:""},
+ ];
+ $("#trendKpis").innerHTML=cards.map(k=>`<div class="kpi trendkpi"><div class="v" style="font-size:${k.v.length>9?'15px':'20px'}">${k.v}</div><div class="l">${k.l}</div><div class="d ${k.c}">${k.t}</div></div>`).join("");
+}
+let trendsBuilt=false;
+function renderTrends(){
+ $("#trendsLead").innerHTML=TRENDS_NARRATIVE;
+ renderTrendKpis();renderVolume();renderCtbc();renderSector();renderTheme();
+ populateScatterFilters();renderScatter();
+ trendsBuilt=true;
+}
+function setView(v){
+ const tr=v==='trends';
+ $("#weeklyView").style.display=tr?'none':'';
+ $("#trendsView").style.display=tr?'':'none';
+ $("#readingLabel").style.display=tr?'none':'';
+ $("#dateseg").style.display=tr?'none':'';
+ document.querySelectorAll('#viewseg button').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
+ if(tr&&!trendsBuilt)renderTrends();
+ window.scrollTo(0,0);
+}
+$("#viewseg").querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.v)));
+document.querySelectorAll('#themeMetric button').forEach(b=>b.addEventListener('click',()=>setThemeMetric(b.dataset.m)));
+["scWeek","scSector"].forEach(id=>$("#"+id).addEventListener('change',renderScatter));
+
+fillSeg();fillGloss();fillSecondary();fillSecDist();fillSecMovers();fillSecLinks();renderWeek();initMapControls();
+setView('weekly');
+</script>
+</body>
+</html>
