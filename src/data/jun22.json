@@ -1,0 +1,654 @@
+{
+ "key": "jun22",
+ "tab": "Jun 22",
+ "date": "2026-06-22",
+ "week": {
+  "label": "Week of Mon 22 Jun 2026 · generated 24 Jun 2026 · updated weekly from IFR / LSEG LPC",
+  "theme": "Malaysian data centres test lenders",
+  "lead": "Malaysia's <b>data-centre boom</b> is testing how much its lenders can actually hold. <b>DayOne</b> is back for ~<b>US$3.7bn</b> — bigger than the US$3.46bn it closed a year ago — while <b>AirTrunk</b> (US$2.325bn) and <b>Princeton Digital</b> pile on, taking 2026's Malaysian DC borrowings well past 2025's <b>US$8bn</b>. The catch: the same seven hyperscaler offtakers keep recurring, loan-to-cost is creeping above <b>90%</b>, and banks are hitting single-name, sector and country <b>exposure limits</b>. The question on every desk — who is left to fund the next campus, and at a spread that pays for the risk?",
+  "wnLabel": "· week of Mon 22 Jun 2026 — vs the Jun 15 reading",
+  "wnNote": "The lead rotates from Taiwan's chip-borrowing surge (Jun 15) to Malaysia's data-centre jumbo loans — and the credit & regulatory limits now straining lenders. Same AI thread, but the pressure point moves from the chip up to the data centre that runs it.",
+  "whatsnew": [
+   {
+    "tag": "NEW THEME",
+    "bg": "var(--teal-soft)",
+    "c": "var(--ctbc)",
+    "t": "Lead flips from Taiwan semis (Jun 15) to Malaysia's data-centre boom — and the lender-capacity strain behind it."
+   },
+   {
+    "tag": "NEW",
+    "bg": "var(--teal-soft)",
+    "c": "var(--ctbc)",
+    "t": "AirTrunk launches a US$2.325bn PF for 198MW of its JHB2 Johor campus (~225bp/SOFR, ~12 banks) — a fresh jumbo alongside DayOne's ~US$3.7bn."
+   },
+   {
+    "tag": "DEBUT",
+    "bg": "var(--surface2)",
+    "c": "var(--navy)",
+    "t": "Princeton Digital closes US$456m for the JC3 Jakarta campus — 12 lenders, green loan, +US$400m accordion."
+   },
+   {
+    "tag": "CTBC",
+    "bg": "var(--teal-soft)",
+    "c": "var(--ctbc)",
+    "t": "CTBC steps up as a lead: arranging SPIL's NT$40bn half of ASE's NT$80bn, and an MLAB on Apollo's ¥360bn NSG buyout (listed as 'CBC Bank')."
+   },
+   {
+    "tag": "NEW",
+    "bg": "var(--teal-soft)",
+    "c": "var(--ctbc)",
+    "t": "Australia cluster lands: Endeavour Energy A$1.8bn, Perth Airport A$500m, Transurban A$825m, Tabcorp A$980m — plus EQT's A$145m Fitness Passport add-on (CTBC a relationship lender)."
+   },
+   {
+    "tag": "UPSIZED",
+    "bg": "var(--amber-soft)",
+    "c": "var(--amber)",
+    "t": "Gunvor's Singapore SLL upsized to US$1.37bn from a US$800m launch — 32 banks at just 70bp over SOFR."
+   },
+   {
+    "tag": "PRICING",
+    "bg": "var(--amber-soft)",
+    "c": "var(--amber)",
+    "t": "Banks warn Asia hasn't repriced: DC spreads ticked up in the US/Europe but 'in Asia it hasn't', even as exposure limits bite globally."
+   }
+  ],
+  "kpis": [
+   {
+    "v": "US$8bn+",
+    "l": "2026 Malaysia data-centre loans, on track to beat 2025's US$8bn",
+    "t": "▲ New record",
+    "c": "up",
+    "spark": "ai"
+   },
+   {
+    "v": "US$3.7bn",
+    "l": "DayOne's new Johor borrowing — Asia's biggest DC draw, after US$3.46bn last year",
+    "t": "Biggest single draw",
+    "c": "warn"
+   },
+   {
+    "v": ">2GW",
+    "l": "Johor DC capacity planned at end-2025 — largest in Asia Pacific (Cushman & Wakefield)",
+    "t": "▲ Supply surge",
+    "c": "up"
+   },
+   {
+    "v": "up to ~98%",
+    "l": "Loan-to-cost on the largest hyperscaler PFs (Oracle/Vantage, US) — leverage creep",
+    "t": "⚠ Thin equity",
+    "c": "warn"
+   },
+   {
+    "v": "70–350bp",
+    "l": "Range of all-in spreads in the reading, Gunvor SLL → Fitness Passport LBO",
+    "t": "Risk ladder",
+    "c": "",
+    "spark": "spread"
+   }
+  ],
+  "big": [
+   {
+    "title": "Malaysia data-centre loan volume",
+    "cap": "DC syndicated loans raised from Malaysia (US$bn) — IFR / LSEG LPC",
+    "rows": [
+     {
+      "lab": "2025 (full yr)",
+      "val": "US$8bn",
+      "w": 62,
+      "c": "var(--navy2)"
+     },
+     {
+      "lab": "2026 (on track)",
+      "val": "> US$8bn · DayOne + AirTrunk alone ≈ US$6bn",
+      "w": 100,
+      "c": "var(--ctbc)"
+     }
+    ],
+    "note": "The same developers are back for the next phase — DayOne, AirTrunk, Bridge, Princeton Digital."
+   },
+   {
+    "title": "APAC data-centre capacity under construction",
+    "cap": "MW under construction at end-2025 — Cushman & Wakefield",
+    "rows": [
+     {
+      "lab": "Malaysia",
+      "val": "483MW",
+      "w": 100,
+      "c": "var(--ctbc)"
+     },
+     {
+      "lab": "Thailand",
+      "val": "347MW",
+      "w": 72,
+      "c": "var(--amber)"
+     },
+     {
+      "lab": "Indonesia",
+      "val": "236MW",
+      "w": 49,
+      "c": "var(--navy2)"
+     }
+    ],
+    "note": "South-East Asia = 1,123MW = 31% of all APAC under-construction capacity."
+   }
+  ],
+  "ctbcCap": "CTBC's footprint across this week's deals",
+  "ctbcReport": [
+   {
+    "badge": 1,
+    "b": "ASE / SPIL (Taiwan)",
+    "t": "CTBC Bank is lead arranger for SPIL's NT$40bn half of ASE's NT$80bn (US$2.52bn) jumbo — Bank of Taiwan leads the ASE half."
+   },
+   {
+    "badge": 1,
+    "b": "Apollo / Nippon Sheet Glass (Japan)",
+    "t": "CTBC (listed as 'CBC Bank') is an MLAB on the ¥360bn (US$2.25bn) LBO loan — a seat on Apollo's largest-ever Japan buyout."
+   },
+   {
+    "badge": 1,
+    "b": "Fitness Passport (Australia)",
+    "t": "CTBC was an MLAB on the A$500m 2025 LBO loan; EQT now seeks a A$145m incremental — CTBC a relationship lender."
+   },
+   {
+    "badge": 1,
+    "b": "Taiwanese-bank stance · data centres",
+    "t": "Context: Asia's most active retail lenders treat DC loans as real-estate exposure; Article 72-2 caps that at 30% of deposits, so CTBC & peers stay small-ticket."
+   }
+  ],
+  "ladderCap": "Approximate all-in margins over benchmark (bp) seen this week — a map of where risk sits",
+  "ladder": [
+   {
+    "bp": "70bp",
+    "w": 130,
+    "c": "var(--green)",
+    "who": "Top commodity trader — Gunvor US$1.37bn SLL (over SOFR; 140bp all-in)"
+   },
+   {
+    "bp": "98–158bp",
+    "w": 210,
+    "c": "var(--teal)",
+    "who": "IG infrastructure — Endeavour Energy, Perth Airport (over BBSY)"
+   },
+   {
+    "bp": "178–203bp",
+    "w": 280,
+    "c": "var(--navy2)",
+    "who": "EM NBFC — Manappuram (all-in 203bp over SOFR)"
+   },
+   {
+    "bp": "~225–240bp",
+    "w": 330,
+    "c": "var(--amber)",
+    "who": "Malaysia DC project loans — AirTrunk, DayOne (over SOFR / Klibor)"
+   },
+   {
+    "bp": "275–300bp",
+    "w": 400,
+    "c": "var(--red)",
+    "who": "Sponsor LBO — Apollo / Nippon Sheet Glass (over Tonar)"
+   },
+   {
+    "bp": "350bp",
+    "w": 440,
+    "c": "var(--red)",
+    "who": "Sub-IG LBO — EQT / Fitness Passport (over BBSY; ~5.3×)"
+   }
+  ],
+  "risks": [
+   {
+    "sev": "HIGH",
+    "cls": "",
+    "h": "Lender concentration limits",
+    "p": "Jumbo single-site DC asks of US$3bn–4bn collide with banks' single-name, sector and country caps. The same ~7 hyperscaler offtakers recur, so offtaker limits bind too — some banks are already 'full' on Oracle."
+   },
+   {
+    "sev": "HIGH",
+    "cls": "",
+    "h": "Offtake renewal risk",
+    "p": "DC leases run 7–10yr (5+5) but renewal is at the offtaker's discretion. No lease-renewal cycle has yet been observed; if technology shifts, hyperscalers can walk away."
+   },
+   {
+    "sev": "HIGH",
+    "cls": "",
+    "h": "Leverage creep / thin equity",
+    "p": "Loan-to-cost is rising above 90% (US Vantage PFs ~93–98%), covenants watered down to little more than a debt cap, with guarantees and change-of-control removed (DayOne dropped its parent guarantee)."
+   },
+   {
+    "sev": "MED",
+    "cls": "med",
+    "h": "Asia hasn't repriced",
+    "p": "As banks keep underwriting, spreads ticked up in the US and Europe but 'in Asia it hasn't' — Asian DC margins lag even as exposure limits tighten globally."
+   },
+   {
+    "sev": "MED",
+    "cls": "med",
+    "h": "Taiwanese-bank capacity",
+    "p": "Asia's most active retail lenders treat DC loans as real-estate exposure; Article 72-2 of the Banking Act caps that at 30% of deposits, so they stay small-ticket — thinning the natural buyer base."
+   },
+   {
+    "sev": "MED",
+    "cls": "med",
+    "h": "China-linked sponsor / offtaker risk",
+    "p": "Deals with ByteDance / PRC links draw a limited lender pool on geopolitics; they lean on relationship PRC & HK banks (six PRC banks took US$450m of DayOne's US$790m sell-down last year)."
+   }
+  ],
+  "deals": [
+   {
+    "borrower": "DayOne Data Centres",
+    "country": "Malaysia",
+    "sector": "Data centers",
+    "amtUSD": 3700,
+    "display": "~US$3.7bn-eq",
+    "tenor": "—",
+    "leads": "Returning to bank market (2025 deal: CIMB, CACIB, DBS, Maybank, OCBC, StanChart, UOB)",
+    "pricing": "478MW+ Nusajaya & Kempas Tech Parks, Johor; doubling down after US$3.46bn (2025); LTC rising >90%",
+    "ctbc": 0,
+    "theme": "ai_dc",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 103.76,
+    "lat": 1.49,
+    "loc": "Johor, Malaysia",
+    "locType": "project"
+   },
+   {
+    "borrower": "AirTrunk (JHB2)",
+    "country": "Malaysia",
+    "sector": "Data centers",
+    "amtUSD": 2325,
+    "display": "US$2.325bn",
+    "tenor": "3y (+1y +1y)",
+    "leads": "~12 banks (DBS, CACIB, ING, UOB…)",
+    "pricing": "198MW JHB2 Johor campus; 225bp/SOFR offshore, 235bp onshore; covenants/guarantees watered down",
+    "ctbc": 0,
+    "theme": "ai_dc",
+    "spreadBp": 225,
+    "basis": "SOFR",
+    "lon": 103.74,
+    "lat": 1.48,
+    "loc": "Johor Bahru, Malaysia",
+    "locType": "project"
+   },
+   {
+    "borrower": "Princeton Digital (JC3)",
+    "country": "Indonesia",
+    "sector": "Data centers",
+    "amtUSD": 456,
+    "display": "US$456m",
+    "tenor": "~4y",
+    "leads": "DBS, HSBC, Maybank, StanChart, SMBC (12 joined)",
+    "pricing": "120MW Greater Jakarta campus; green loan; US$400m TL + US$50m RCF; +US$400m accordion",
+    "ctbc": 0,
+    "theme": "ai_dc",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 106.95,
+    "lat": -6.25,
+    "loc": "Greater Jakarta, Indonesia",
+    "locType": "project"
+   },
+   {
+    "borrower": "Bridge Data Centres",
+    "country": "Malaysia",
+    "sector": "Data centers",
+    "amtUSD": null,
+    "display": "Billion-plus (TBD)",
+    "tenor": "—",
+    "leads": "Among developers returning",
+    "pricing": "Next-phase Malaysian hyperscale campuses; part of the >US$8bn 2026 pipeline",
+    "ctbc": 0,
+    "theme": "ai_dc",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 101.69,
+    "lat": 3.14,
+    "loc": "Malaysia",
+    "locType": "project"
+   },
+   {
+    "borrower": "Endeavour Energy",
+    "country": "Australia",
+    "sector": "Energy & utilities",
+    "amtUSD": 1200,
+    "display": "A$1.8bn",
+    "tenor": "6y–12y",
+    "leads": "CBA, OCBC (MLABs)",
+    "pricing": "A&E; 5 tranches; 97.5–157.5bp over BBSY; electricity distribution network",
+    "ctbc": 0,
+    "theme": "corp_other",
+    "spreadBp": 128,
+    "basis": "BBSY",
+    "lon": 150.99,
+    "lat": -33.81,
+    "loc": "Sydney, Australia",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Perth Airport",
+    "country": "Australia",
+    "sector": "Industrials & other",
+    "amtUSD": 330,
+    "display": "A$500m",
+    "tenor": "7y & 10y",
+    "leads": "Bank of China, CBA, OCBC",
+    "pricing": "Dual-tranche; 105/130bp over BBSY; rated Baa2/BBB",
+    "ctbc": 0,
+    "theme": "corp_other",
+    "spreadBp": 105,
+    "basis": "BBSY",
+    "lon": 115.97,
+    "lat": -31.94,
+    "loc": "Perth, Australia",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Fitness Passport",
+    "country": "Australia",
+    "sector": "Consumer",
+    "amtUSD": 95,
+    "display": "A$145m (incremental)",
+    "tenor": "add-on",
+    "leads": "In talks (2025 MLABs incl. CTBC Bank)",
+    "pricing": "Add-on to A$500m 2025 EQT LBO loan; 350bp over BBSY; ~5.3× leverage",
+    "ctbc": 1,
+    "theme": "ma_lbo",
+    "spreadBp": 350,
+    "basis": "BBSY",
+    "flowFrom": "Taiwan",
+    "lon": 151.21,
+    "lat": -33.87,
+    "loc": "Sydney, Australia",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Transurban Group",
+    "country": "Australia",
+    "sector": "Industrials & other",
+    "amtUSD": 545,
+    "display": "A$825m (new tranche)",
+    "tenor": "4y",
+    "leads": "Add-on to syndicated bank debt",
+    "pricing": "Lifts facility to A$3.47bn; tollroad operator",
+    "ctbc": 0,
+    "theme": "corp_other",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 144.96,
+    "lat": -37.81,
+    "loc": "Melbourne, Australia",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Tabcorp Holdings",
+    "country": "Australia",
+    "sector": "Consumer",
+    "amtUSD": 699,
+    "display": "A$980m",
+    "tenor": "to 2029–2031",
+    "leads": "A&E; pricing reduced",
+    "pricing": "Tranches extended; WAM up to 4.4y; under AUSTRAC AML/CTF scrutiny",
+    "ctbc": 0,
+    "theme": "corp_other",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 144.96,
+    "lat": -37.82,
+    "loc": "Melbourne, Australia",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Australian Vintage",
+    "country": "Australia",
+    "sector": "Consumer",
+    "amtUSD": 85,
+    "display": "A$128m",
+    "tenor": "to 2028 (+1y)",
+    "leads": "NAB (bilateral)",
+    "pricing": "Wine producer refinancing; extends debt by two years",
+    "ctbc": 0,
+    "theme": "corp_other",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 138.6,
+    "lat": -34.93,
+    "loc": "Adelaide, Australia",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "China Vanke",
+    "country": "China",
+    "sector": "Real estate",
+    "amtUSD": 160,
+    "display": "Rmb1.14bn",
+    "tenor": "3y",
+    "leads": "Shenzhen Metro (shareholder loan)",
+    "pricing": "2.29% (1y LPR −71bp); 2nd shareholder loan in <12m; Fitch at RD",
+    "ctbc": 0,
+    "theme": "property",
+    "spreadBp": null,
+    "basis": "LPR",
+    "lon": 114.06,
+    "lat": 22.55,
+    "loc": "Shenzhen, China",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Nine Dragons Paper",
+    "country": "China",
+    "sector": "Industrials & other",
+    "amtUSD": 280,
+    "display": "Rmb2bn",
+    "tenor": "3y",
+    "leads": "BOC, BoComm HK, China Minsheng (club)",
+    "pricing": "Funds tender for US$400m 14% perps; first loan in 3 years",
+    "ctbc": 0,
+    "theme": "corp_other",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 113.75,
+    "lat": 23.02,
+    "loc": "Dongguan, China",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Gulf International Bank",
+    "country": "Saudi Arabia",
+    "sector": "Financials",
+    "amtUSD": 250,
+    "display": "US$250m",
+    "tenor": "3y",
+    "leads": "First Abu Dhabi Bank, StanChart",
+    "pricing": "Senior unsecured TL; 40–60bp upfront fee tiers; GCC-owned",
+    "ctbc": 0,
+    "theme": "fin_leasing",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 46.72,
+    "lat": 24.69,
+    "loc": "Riyadh / Bahrain",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Dubai Islamic Bank",
+    "country": "UAE",
+    "sector": "Financials",
+    "amtUSD": 750,
+    "display": "US$750m",
+    "tenor": "3y",
+    "leads": "HSBC, Mizuho, StanChart",
+    "pricing": "Senior unsecured Islamic financing; rated A3/A; UAE's largest Islamic bank",
+    "ctbc": 0,
+    "theme": "fin_leasing",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 55.27,
+    "lat": 25.2,
+    "loc": "Dubai, UAE",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Manappuram Finance",
+    "country": "India",
+    "sector": "Financials",
+    "amtUSD": 200,
+    "display": "US$200m (+US$50m greenshoe)",
+    "tenor": "3y",
+    "leads": "Axis Bank, DBS",
+    "pricing": "All-in 203bp via 178bp over SOFR; gold-loan NBFC; tighter than Sep",
+    "ctbc": 0,
+    "theme": "fin_leasing",
+    "spreadBp": 178,
+    "basis": "SOFR",
+    "lon": 76.21,
+    "lat": 10.52,
+    "loc": "Thrissur, India",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Apollo / Nippon Sheet Glass",
+    "country": "Japan",
+    "sector": "Industrials & other",
+    "amtUSD": 2250,
+    "display": "¥360bn",
+    "tenor": "5y",
+    "leads": "Barclays, CTBC ('CBC Bank'), DBJ, Nomura, SBI Shinsei, SMBC, SMTB",
+    "pricing": "LBO; TLA 275 / TLB 300 / RCF 275bp over Tonar; take-private; Apollo's biggest Japan deal",
+    "ctbc": 1,
+    "theme": "ma_lbo",
+    "spreadBp": 300,
+    "basis": "Tonar",
+    "flowFrom": "Taiwan",
+    "lon": 139.69,
+    "lat": 35.69,
+    "loc": "Tokyo, Japan",
+    "locType": "target"
+   },
+   {
+    "borrower": "Warburg Pincus / JSB",
+    "country": "Japan",
+    "sector": "Real estate",
+    "amtUSD": 970,
+    "display": "¥155bn",
+    "tenor": "2y bridge + term",
+    "leads": "MUFG (bridge); Aozora + MUFG (senior); Deutsche, Kiraboshi (mezz)",
+    "pricing": "LBO; ¥63bn bridge + ¥78bn senior + ¥14bn mezz; ¥9,000/sh tender (28.6% premium)",
+    "ctbc": 0,
+    "theme": "ma_lbo",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 139.7,
+    "lat": 35.66,
+    "loc": "Tokyo, Japan",
+    "locType": "target"
+   },
+   {
+    "borrower": "Daiichi Sankyo",
+    "country": "Japan",
+    "sector": "Healthcare",
+    "amtUSD": 1250,
+    "display": "¥200bn",
+    "tenor": "3y & 5y",
+    "leads": "Japanese city & regional banks",
+    "pricing": "Financial covenants (≥75% equity floor; no 2 consecutive net losses); drug maker",
+    "ctbc": 0,
+    "theme": "corp_other",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 139.77,
+    "lat": 35.69,
+    "loc": "Tokyo, Japan",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Turkiye Sinai Kalkinma Bankasi",
+    "country": "Turkey",
+    "sector": "Financials",
+    "amtUSD": 350,
+    "display": "US$350m",
+    "tenor": "—",
+    "leads": "JBIC (US$175m) + MUFG",
+    "pricing": "Green credit line; renewables / energy-efficiency; JBIC-guaranteed",
+    "ctbc": 0,
+    "theme": "green_infra",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 28.98,
+    "lat": 41.01,
+    "loc": "Istanbul, Turkey",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Gunvor (Singapore)",
+    "country": "Singapore",
+    "sector": "Energy & utilities",
+    "amtUSD": 1366,
+    "display": "US$1.366bn",
+    "tenor": "364-day (+12m ×2)",
+    "leads": "China Citic, DBS, MUFG, OCBC (active BMLAs); 32 banks",
+    "pricing": "SLL revolver; 70bp over SOFR (140bp all-in); upsized from US$800m launch",
+    "ctbc": 0,
+    "theme": "corp_other",
+    "spreadBp": 70,
+    "basis": "SOFR",
+    "lon": 103.85,
+    "lat": 1.29,
+    "loc": "Singapore",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "ASE / SPIL",
+    "country": "Taiwan",
+    "sector": "AI / Semiconductors",
+    "amtUSD": 2520,
+    "display": "NT$80bn",
+    "tenor": "5y",
+    "leads": "Bank of Taiwan (ASE) · CTBC Bank (SPIL)",
+    "pricing": "ASE & SPIL borrow NT$40bn each; ~37bp over Taibor expected; 1.7% floor; back within a year",
+    "ctbc": 1,
+    "theme": "ai_semis",
+    "spreadBp": 37,
+    "basis": "Taibor",
+    "lon": 120.3,
+    "lat": 22.63,
+    "loc": "Kaohsiung, Taiwan",
+    "locType": "HQ"
+   },
+   {
+    "borrower": "Hexa Renewables",
+    "country": "Taiwan",
+    "sector": "Green & infrastructure",
+    "amtUSD": 355,
+    "display": "NT$11.3bn",
+    "tenor": "5.93y",
+    "leads": "Mizuho (green coord); SinoPac, BRI, KGI, OCBC, StanChart",
+    "pricing": "Floating solar (Changhua) + battery storage; I Squared Capital portfolio co",
+    "ctbc": 0,
+    "theme": "green_infra",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 120.43,
+    "lat": 24.07,
+    "loc": "Changhua, Taiwan",
+    "locType": "project"
+   },
+   {
+    "borrower": "Hai An Transport",
+    "country": "Vietnam",
+    "sector": "Industrials & other",
+    "amtUSD": 121,
+    "display": "US$121.24m",
+    "tenor": "10y",
+    "leads": "Bank SinoPac (MLAB)",
+    "pricing": "Senior secured; two 7,100-TEU vessels; SBLC-backed (VietinBank/BIDV)",
+    "ctbc": 0,
+    "theme": "fin_leasing",
+    "spreadBp": null,
+    "basis": "",
+    "lon": 106.69,
+    "lat": 20.86,
+    "loc": "Haiphong, Vietnam",
+    "locType": "HQ"
+   }
+  ]
+ }
+}

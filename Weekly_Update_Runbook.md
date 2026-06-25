@@ -20,6 +20,7 @@ A scheduled task — **"weekly-loan-tracker"** — fires **every Monday (~9:00 A
    - **writes a new `src/data/<week>.json`** for the reading and **rebuilds `dist/`** (`npm run build`) — the new reading becomes a selectable week (prior weeks stay; switch with the date toggle), newest shown by default,
    - refreshes **`CTBC_Loan_Market_Briefing.docx`** for the new week,
    - fills the **"What's new"** panel by diffing against the previous week (debuts, upsizes, new mandates, new lead themes, pricing moves),
+   - refreshes the **Trends** (cross-week) view — the charts and KPIs recompute automatically, and the `TRENDS_NARRATIVE` commentary is rewritten each week to fold in the new reading,
    - posts a short summary and shows you the updated files.
 3. If it finds **no** new PDF, it changes nothing and just nudges you to add this week's reading.
 
@@ -49,4 +50,4 @@ A scheduled task — **"weekly-loan-tracker"** — fires **every Monday (~9:00 A
 | `Weekly_Update_Runbook.md` | This file |
 | `archive/<date>/` | Prior weeks' briefing + dashboard (created automatically) |
 
-*Set up June 2026. Tracked editions so far: week of Mon 1 Jun 2026 and week of Mon 15 Jun 2026 (switch with the date toggle).*
+*Set up June 2026. Tracked editions so far: weeks of Mon 1, 8, 15 and 22 Jun 2026 (switch with the date toggle).*
