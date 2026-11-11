@@ -1,60 +1,74 @@
-# CTBC APAC Syndicated Loan Tracker
+# APAC Syndicated Loan Tracker
 
-Internal **confidential** weekly dashboard + briefing on the Asia-Pacific syndicated loan market, with a Taiwan / CTBC lens, for the CTBC corporate-banking desk.
+A weekly dashboard and written briefing on the Asia-Pacific syndicated loan market, with a Taiwan lens. I built it during my summer 2026 capital markets internship at CTBC Bank to learn the market one week at a time.
 
-> ⚠️ **Read [NOTICE.md](NOTICE.md) before sharing or hosting.** This is confidential and built partly from licensed IFR / LSEG LPC material — it must stay on CTBC-controlled, access-restricted systems.
+**Status: archive.** The internship has ended. This repository covers four weekly readings (1, 8, 15 and 22 June 2026) and is no longer updated.
+
+> Please read [NOTICE.md](NOTICE.md). It explains where the market content came from and what the MIT licence does and does not cover.
+
+## What it does
+
+- **Weekly view.** The week's lead theme, what changed since the week before, key numbers, a sortable and filterable deal table, a pricing ladder, risks to watch, a pan-and-zoom world map with one dot per deal, a secondary-market panel showing where loans trade, and a glossary of loan terms.
+- **Trends view.** Charts worked out across all weeks from the deal data: volume, sector mix, a theme tracker, CTBC's involvement and a pricing scatter.
+- **Present mode and print.** A larger, higher-contrast layout for screen sharing, and a print stylesheet that turns the page into a one-page briefing.
+- **One file, no network.** The built dashboard is a single self-contained HTML file. It opens with a double-click and makes no network requests.
 
 ## What's in here
 
-| File | What it is |
+| Path | What it is |
 |------|------------|
-| `dist/CTBC_Loan_Market_Dashboard.html` | The interactive dashboard — **one self-contained file**, no internet needed. **Built from `src/` — don't hand-edit.** |
-| `src/` | Editable source: `template.html` (CSS + JS + structure) and `data/*.json` (one small file per week, plus `shared.json` + `world_land.json`). |
-| `tools/`, `package.json` | Build (`npm run build`) + jsdom smoke test (`npm test`). |
-| `CTBC_Loan_Market_Briefing.md` | The written briefing — **this Markdown file is the source of truth**. |
-| `CTBC_Loan_Market_Briefing.docx` | Word version, generated from the Markdown (see below). |
-| `CTBC_Loan_Market_Deck.pptx` | Slide deck for the supervisor discussion. |
-| `Weekly_Update_Runbook.md` | How the weekly refresh works. |
+| `dist/CTBC_Loan_Market_Dashboard.html` | The built dashboard, one self-contained file. It is generated from `src/`, so don't edit it by hand. |
+| `src/template.html` | All the CSS, JavaScript and page structure, with a single marker where the build injects the data. |
+| `src/data/` | One JSON file per week (`jun1.json`, `jun8.json`, `jun15.json`, `jun22.json`), plus `shared.json` for the cross-week panels and `world_land.json` for the map's land outlines. |
+| `tools/` | `build.mjs` (the build), `build.py` (the same build without Node), `test.mjs` (a jsdom smoke test) and `extract.py` (the one-off script that split the original single-file dashboard into `src/`). |
+| `CTBC_Loan_Market_Briefing.md` | The written briefing. This Markdown file is the source, and the `.docx` is generated from it. |
+| `CTBC_Loan_Market_Deck.pptx` | The slide deck that went with the briefing. |
+| `Weekly_Update_Runbook.md` | How the weekly refresh worked. |
+| `MAP_FEATURE.md` | Design notes for the deal map. |
+| `CLAUDE.md` | Project context for working on the code with Claude. |
 
 ## Build it
 
 ```bash
-npm install          # once — pulls jsdom for the test
-npm run build        # bundle src/ -> dist/CTBC_Loan_Market_Dashboard.html
-npm test             # jsdom smoke test (every week renders & switches)
-npm run verify       # build + test in one go
+npm install          # once, pulls jsdom for the test
+npm run build        # bundle src/ into dist/CTBC_Loan_Market_Dashboard.html
+npm test             # jsdom smoke test: every week renders and switches
+npm run verify       # build and test in one go
 ```
-No Node? `python3 tools/build.py` is a drop-in build (same output).
 
-## Preview it locally (no hosting needed)
+No Node? `python3 tools/build.py` produces the same output.
 
-After building, **double-click `dist/CTBC_Loan_Market_Dashboard.html`** — it opens in your browser. For live-reload while editing, use the VS Code **Live Server** extension on `src/template.html` (note: the template shows the page chrome but not the data until you build), or serve the folder:
+## Preview it
+
+After building, double-click `dist/CTBC_Loan_Market_Dashboard.html` to open it in a browser. To serve the folder instead:
+
 ```bash
 python3 -m http.server 8080
 # then open http://localhost:8080/dist/CTBC_Loan_Market_Dashboard.html
 ```
-All of these are **local only** — nothing is published.
 
-## Editing the dashboard
+For live reload while editing, the VS Code Live Server extension works on `src/template.html`. The template shows the page frame but no data until you build.
 
-Data is separated from presentation. **To change the data**, edit the small JSON files in `src/data/` (one per week: `jun15.json` = `{key, tab, date, week:{deals, kpis, whatsnew, ladder, risks, …}}`; plus `shared.json` for the cross-week panels). **To change look/behaviour**, edit `src/template.html` (CSS + vanilla JS). Then `npm run build`. **To add a week**, drop a new `src/data/<week>.json` (copy a sibling, set `key`/`tab`/`date`) and rebuild — the build re-sorts the date toggle by `date` automatically; no other file to touch.
+## How it is organised
 
-## Regenerate the Word briefing (optional)
+Data is kept apart from presentation.
 
-The `.docx` is generated from `CTBC_Loan_Market_Briefing.md`:
+- **To change the data,** edit the JSON files in `src/data/`. Each week is one file shaped `{key, tab, date, week: {deals, kpis, whatsnew, ladder, risks, ...}}`. `shared.json` holds the panels that span weeks.
+- **To change the look or behaviour,** edit `src/template.html` (CSS and plain JavaScript, no framework).
+- **To add a week,** copy a sibling file to `src/data/<week>.json`, set its `key`, `tab` and `date`, and rebuild. The build sorts the date toggle by `date`, so no other file changes.
+
+Then run `npm run build`.
+
+## Regenerate the Word briefing
+
 ```bash
 pandoc CTBC_Loan_Market_Briefing.md -o CTBC_Loan_Market_Briefing.docx --toc --toc-depth=2
 ```
 
-## Version control (local)
+## How the weekly refresh worked
 
-```bash
-git init
-git add .
-git commit -m "Initial commit: CTBC loan tracker dashboard + briefing"
-```
-Commit as you work. **Do not add a public/personal remote** — see [NOTICE.md](NOTICE.md). The live, access-controlled link is created by **CTBC**, on CTBC systems; you build and maintain the files here.
+Each Monday a scheduled Claude task read that week's Asia-Pacific loan coverage, wrote a new `src/data/<week>.json`, rebuilt the dashboard and refreshed the briefing. `Weekly_Update_Runbook.md` has the details. The publications it read are licensed and were never part of this repository.
 
-## Weekly refresh
+## Licence
 
-A scheduled task can refresh this each Monday from the new IFR / LSEG reading (adds a new selectable week to the dashboard and refreshes the briefing). Drop the new reading PDF into the parent `Finance` folder. See `Weekly_Update_Runbook.md`.
+The code is under the MIT licence (see [LICENSE](LICENSE)). The market content and data are not. See [NOTICE.md](NOTICE.md).
