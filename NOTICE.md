@@ -1,22 +1,36 @@
-# CONFIDENTIAL — Internal CTBC use only
+# Notice: status, sources and licence
 
-**Read this before sharing, hosting, or pushing anywhere.**
+## Status
 
-## Confidentiality
-This project contains confidential market analysis and internal CTBC positioning. It is for internal CTBC use only and **must not be shared outside CTBC** or published to any public location.
+This is a personal archive of a learning project from my summer 2026 internship at CTBC Bank. I no longer work there.
 
-## Third-party source material
-The underlying weekly readings are from **IFR / LSEG LPC**, a licensed subscription service. The raw reading PDFs are deliberately **excluded from version control** (see `.gitignore`) and must not be redistributed. The summaries here rely on that licensed source plus public reporting, and are for internal use.
+The repository was first written as an internal, confidential project. It is public now with the agreement of my former supervisor at the bank.
 
-## Hosting rules (important)
-A shareable link must enforce **CTBC identity** (single sign-on / corporate directory) — not just be an unlisted URL.
+It is not an official CTBC publication. Nothing here represents the views of CTBC Bank, and any opinions in the briefing are my own.
 
-- **A private GitHub repo does NOT make a published page private.** On Free/Pro accounts, GitHub Pages is public to anyone with the link.
-- **Approved routes:** CTBC intranet / SharePoint (already login-gated), or — if available — GitHub **Enterprise Cloud private Pages** behind CTBC SSO.
-- **Not permitted:** public GitHub Pages, personal hosting accounts, or any external host without CTBC IT / compliance sign-off (even a *private* repo stores the data on a third party).
+## Where the market content came from
 
-## Before you publish
-Get sign-off from your manager / CTBC IT / compliance, and host via a CTBC-controlled, access-restricted system. When in doubt, keep it **local** (this repo on your machine is fine).
+- The weekly deal tables and commentary summarise licensed market publications that I read during the internship (IFR / LSEG LPC coverage of Asia-Pacific syndicated loans), together with public reporting.
+- The original publications are not in this repository. `.gitignore` keeps them out.
+- The figures were compiled for study and have not been re-checked against their sources since June 2026. Treat them as illustrative, not as a data source.
 
-## Git remotes
-This is intended as a **local** repository. Do **not** run `git remote add` / `git push` to a personal or public GitHub. Any remote must be a CTBC-owned, private/internal repository approved for this data.
+## What the MIT licence covers
+
+**Covered:** the code. That means `src/template.html`, the build and test scripts in `tools/`, and the project configuration.
+
+**Not covered:** the market content. These files contain third-party information that is not mine to license:
+
+- `src/data/jun1.json`, `jun8.json`, `jun15.json`, `jun22.json` and `shared.json`
+- `dist/CTBC_Loan_Market_Dashboard.html`, which has that data built in
+- `CTBC_Loan_Market_Briefing.md` and `.docx`
+- `CTBC_Loan_Market_Deck.pptx`
+
+Please do not reuse or redistribute that content. To use the code, swap in your own data.
+
+## Not advice
+
+Nothing here is investment, legal or financial advice.
+
+## Removal requests
+
+If you hold rights in any material here and want it taken down, open an issue on this repository and I will remove it.
